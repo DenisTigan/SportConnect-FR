@@ -1,0 +1,58 @@
+<div class="main-container rounded-[50px] shadow-2xl overflow-hidden flex relative bg-[#f0f2f5]" [ngClass]="{'active': !isLoginForm}">
+  
+  <div class="absolute inset-0 w-full h-full flex z-10">
+    
+    <div class="w-1/2 h-full p-12 flex flex-col items-center justify-center transition-all duration-500"
+         [ngClass]="{'opacity-100 pointer-events-auto': isLoginForm, 'opacity-0 pointer-events-none': !isLoginForm}">
+      <h1 class="text-3xl font-black italic text-[#004799] mb-8 uppercase tracking-tighter text-center">ORADEA SPORT CONNECT</h1>
+      <h2 class="text-4xl font-bold mb-2 text-gray-800">Welcome Back</h2>
+      <p class="text-gray-500 mb-8 text-center text-sm px-10">Conectează-te pentru a-ți rezerva terenul preferat.</p>
+      
+      <div class="w-full space-y-4 max-w-sm">
+        <input type="email" placeholder="nume@exemplu.ro" class="w-full p-4 bg-white rounded-xl outline-none shadow-sm text-gray-800 border border-transparent focus:border-blue-500 transition-all">
+        <input type="password" placeholder="Parolă" class="w-full p-4 bg-white rounded-xl outline-none shadow-sm text-gray-800 border border-transparent focus:border-blue-500 transition-all">
+        <button class="w-full bg-[#3e85e1] text-white py-4 rounded-xl font-bold shadow-lg hover:bg-blue-600 transition-all uppercase tracking-wider">Autentificare</button>
+      </div>
+    </div>
+
+    <div class="w-1/2 h-full p-12 flex flex-col items-center justify-center transition-all duration-500"
+         [ngClass]="{'opacity-100 pointer-events-auto': !isLoginForm, 'opacity-0 pointer-events-none': isLoginForm}">
+      <h1 class="text-3xl font-black italic text-[#004799] mb-8 uppercase tracking-tighter text-center">ORADEA SPORT CONNECT</h1>
+      <h2 class="text-4xl font-bold mb-2 text-gray-800">Registration</h2>
+      <p class="text-gray-500 mb-8 text-center text-sm px-10">Alătură-te comunității noastre sportive.</p>
+      
+      <div class="w-full space-y-4 max-w-sm text-gray-800">
+        <input type="text" placeholder="Utilizator" class="w-full p-4 bg-white rounded-xl outline-none shadow-sm border border-transparent focus:border-green-500 transition-all">
+        <input type="email" placeholder="Email" class="w-full p-4 bg-white rounded-xl outline-none shadow-sm border border-transparent focus:border-green-500 transition-all">
+        <input type="password" placeholder="Parolă" class="w-full p-4 bg-white rounded-xl outline-none shadow-sm border border-transparent focus:border-green-500 transition-all">
+        <button class="w-full bg-[#1a8a3d] text-white py-4 rounded-xl font-bold shadow-lg hover:bg-green-600 transition-all uppercase tracking-wider">Înregistrare</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="absolute top-0 w-1/2 h-full transition-all duration-700 ease-in-out z-20 flex items-center justify-center"
+       [ngClass]="isLoginForm ? 'left-1/2-in' : 'left-0-in'">
+    
+    <div class="relative w-full h-full flex items-center justify-center transition-all duration-700"
+         [style.transform]="isLoginForm ? 'rotate(0deg)' : 'rotate(-360deg)'">
+      
+      <img [src]="isLoginForm ? 'tennis_ball.png' : '/soccer_ball.png'" 
+           alt="ball" 
+           class="w-[90%] h-[90%] object-contain drop-shadow-[0_35px_35px_rgba(0,0,0,0.5)] transition-all duration-300">
+
+      <div class="absolute text-white text-center w-48 z-30 flex flex-col items-center">
+        <h3 class="font-black text-lg uppercase italic mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+          HELLO, WELCOME!
+        </h3>
+        <p class="text-[11px] font-bold mb-4 drop-shadow-[0_2px_3px_rgba(0,0,0,0.9)]">
+          {{ isLoginForm ? "Nu ai cont încă?" : "Ai deja un cont?" }}
+        </p>
+        <button (click)="toggleForm()" 
+                class="w-32 py-2 border-2 border-white rounded-lg text-xs font-black uppercase bg-black/40 hover:bg-white hover:text-black transition-all shadow-xl backdrop-blur-[2px]">
+          {{ isLoginForm ? 'Register' : 'Login' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
