@@ -1,0 +1,119 @@
+@import 'swiper/css';
+@import 'swiper/css/navigation';
+@import 'swiper/css/pagination';
+@import 'swiper/css/autoplay';
+
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* BODY */
+body {
+  font-family: 'Inter', sans-serif;
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+/* GLOBAL CONTAINER */
+.container {
+  width: 1200px;
+  max-width: 90%;
+  margin: 0 auto;
+}
+
+/* GLOBAL TITLES */
+h2 {
+  font-size: 34px;
+  font-weight: 700;
+}
+
+/* SMOOTH */
+html {
+  scroll-behavior: smooth;
+}
+
+
+.fade-up {
+  opacity: 0;
+  transform: translateY(40px);
+
+  animation: fadeUp 1s ease forwards;
+}
+
+.delay-1 {
+  animation-delay: 0.2s;
+}
+
+.delay-2 {
+  animation-delay: 0.4s;
+}
+
+.delay-3 {
+  animation-delay: 0.6s;
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+
+
+@media (max-width: 900px) {
+
+  h1 {
+    font-size: 48px !important;
+  }
+
+  .search-box {
+    flex-direction: column;
+    border-radius: 25px !important;
+    width: 100%;
+  }
+
+  .search-box input,
+  .search-box select,
+  .search-box button {
+    width: 100%;
+  }
+
+  .grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .links {
+    display: none;
+  }
+}
+
+
+
+/* .dark-mode {
+  background: #020617;
+  color: white;
+}
+
+.dark-mode .categories,
+.dark-mode .venues {
+  background: #020617;
+}
+
+.dark-mode .card {
+  background: #0f172a;
+  color: white;
+}
+
+.dark-mode p {
+  color: #cbd5e1;
+} */

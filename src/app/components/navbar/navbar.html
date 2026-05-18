@@ -1,0 +1,46 @@
+<nav class="navbar">
+  <div class="container nav-content">
+
+    <div class="logo">SportConnect</div>
+
+    <div class="links">
+      <a>Find a Court</a>
+      <a>Become a Partner</a>
+    </div>
+
+    <button class="login-btn">Login</button>
+
+  </div>
+</nav>
+
+<nav class="navbar">
+
+  <div class="container nav-content">
+
+    <div class="logo">SportConnect</div>
+
+    <div class="links" [class.active]="menuOpen">
+      <a>Find a Court</a>
+      <a>Become a Partner</a>
+      <a>Contact</a>
+    </div>
+
+    <div class="actions">
+
+      <!-- <button class="theme-btn" (click)="toggleTheme()">
+        🌙
+      </button> -->
+
+      <button class="login-btn">
+        Login
+      </button>
+
+      <div class="hamburger" (click)="toggleMenu()">
+        ☰
+      </div>
+
+    </div>
+
+  </div>
+
+</nav>

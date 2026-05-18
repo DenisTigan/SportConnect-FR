@@ -1,0 +1,65 @@
+<section class="carousel-section">
+
+  <div class="container">
+
+    <div
+      class="carousel"
+
+      (touchstart)="onTouchStart($event)"
+      (touchend)="onTouchEnd($event)"
+    >
+
+
+      <img
+        class="carousel-image"
+        [src]="'/' + images[currentIndex]"
+        >
+      <div class="overlay">
+
+        <h2 class="fade-up">
+          Premium Sports Experience
+        </h2>
+
+        <p class="fade-up delay-1">
+          Discover top sports venues near you.
+        </p>
+
+      </div>
+
+      <!-- ARROWS -->
+      <button
+        class="arrow left"
+        (click)="prevSlide()"
+      >
+        ❮
+      </button>
+
+      <button
+        class="arrow right"
+        (click)="nextSlide()"
+      >
+        ❯
+      </button>
+
+      <!-- DOTS -->
+      <div class="dots">
+
+        <span
+          *ngFor="
+            let img of images;
+            let i = index
+          "
+
+          [class.active]="i === currentIndex"
+
+          (click)="goToSlide(i)"
+        >
+        </span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
