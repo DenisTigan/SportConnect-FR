@@ -9,23 +9,77 @@
       <p class="text-gray-500 mb-8 text-center text-sm px-10">Conectează-te pentru a-ți rezerva terenul preferat.</p>
       
       <div class="w-full space-y-4 max-w-sm">
-        <input type="email" placeholder="nume@exemplu.ro" class="w-full p-4 bg-white rounded-xl outline-none shadow-sm text-gray-800 border border-transparent focus:border-blue-500 transition-all">
-        <input type="password" placeholder="Parolă" class="w-full p-4 bg-white rounded-xl outline-none shadow-sm text-gray-800 border border-transparent focus:border-blue-500 transition-all">
-        <button class="w-full bg-[#3e85e1] text-white py-4 rounded-xl font-bold shadow-lg hover:bg-blue-600 transition-all uppercase tracking-wider">Autentificare</button>
+        <input type="email" 
+               name="loginEmail"
+               [(ngModel)]="loginData.email"
+               placeholder="Email" 
+               required
+               class="w-full p-4 bg-white rounded-xl outline-none shadow-sm text-gray-800 border border-transparent focus:border-blue-500 transition-all">
+        
+        <input type="password" 
+               name="loginPassword"
+               [(ngModel)]="loginData.password"
+               placeholder="Parolă" 
+               required
+               class="w-full p-4 bg-white rounded-xl outline-none shadow-sm text-gray-800 border border-transparent focus:border-blue-500 transition-all">
+        
+        <button type="button" 
+                (click)="onLogin()"
+                class="w-full bg-[#3e85e1] text-white py-4 rounded-xl font-bold shadow-lg hover:bg-blue-600 transition-all uppercase tracking-wider">
+          Autentificare
+        </button>
       </div>
     </div>
 
     <div class="w-1/2 h-full p-12 flex flex-col items-center justify-center transition-all duration-500"
          [ngClass]="{'opacity-100 pointer-events-auto': !isLoginForm, 'opacity-0 pointer-events-none': isLoginForm}">
-      <h1 class="text-3xl font-black italic text-[#004799] mb-8 uppercase tracking-tighter text-center">ORADEA SPORT CONNECT</h1>
+      <h1 class="text-3xl font-black italic text-[#004799] mb-6 uppercase tracking-tighter text-center">ORADEA SPORT CONNECT</h1>
       <h2 class="text-4xl font-bold mb-2 text-gray-800">Registration</h2>
-      <p class="text-gray-500 mb-8 text-center text-sm px-10">Alătură-te comunității noastre sportive.</p>
+      <p class="text-gray-500 mb-6 text-center text-sm px-10">Alătură-te comunității noastre sportive.</p>
       
-      <div class="w-full space-y-4 max-w-sm text-gray-800">
-        <input type="text" placeholder="Utilizator" class="w-full p-4 bg-white rounded-xl outline-none shadow-sm border border-transparent focus:border-green-500 transition-all">
-        <input type="email" placeholder="Email" class="w-full p-4 bg-white rounded-xl outline-none shadow-sm border border-transparent focus:border-green-500 transition-all">
-        <input type="password" placeholder="Parolă" class="w-full p-4 bg-white rounded-xl outline-none shadow-sm border border-transparent focus:border-green-500 transition-all">
-        <button class="w-full bg-[#1a8a3d] text-white py-4 rounded-xl font-bold shadow-lg hover:bg-green-600 transition-all uppercase tracking-wider">Înregistrare</button>
+      <div class="w-full space-y-3 max-w-sm text-gray-800">
+        <div class="flex space-x-2">
+          <input type="text" 
+                 name="lastName"
+                 [(ngModel)]="registerData.lastName"
+                 placeholder="Nume" 
+                 required
+                 class="w-1/2 p-3 bg-white rounded-xl outline-none shadow-sm border border-transparent focus:border-green-500 transition-all">
+          
+          <input type="text" 
+                 name="firstName"
+                 [(ngModel)]="registerData.firstName"
+                 placeholder="Prenume" 
+                 required
+                 class="w-1/2 p-3 bg-white rounded-xl outline-none shadow-sm border border-transparent focus:border-green-500 transition-all">
+        </div>
+
+        <input type="email" 
+               name="registerEmail"
+               [(ngModel)]="registerData.email"
+               placeholder="Email" 
+               required
+               class="w-full p-3 bg-white rounded-xl outline-none shadow-sm border border-transparent focus:border-green-500 transition-all">
+        
+        <input type="tel" 
+               name="phoneNumber"
+               [(ngModel)]="registerData.phoneNumber"
+               placeholder="Număr de telefon" 
+               required
+               class="w-full p-3 bg-white rounded-xl outline-none shadow-sm border border-transparent focus:border-green-500 transition-all">
+
+        <input type="password" 
+               name="registerPassword"
+               [(ngModel)]="registerData.password"
+               placeholder="Parolă" 
+               required
+               class="w-full p-3 bg-white rounded-xl outline-none shadow-sm border border-transparent focus:border-green-500 transition-all">
+        
+        <button type="button" 
+                (click)="onRegister()"
+                class="w-full bg-[#1a8a3d] text-white py-4 rounded-xl font-bold shadow-lg hover:bg-green-600 transition-all uppercase tracking-wider">
+          Înregistrare
+        </button>
       </div>
     </div>
   </div>
@@ -36,11 +90,11 @@
     <div class="relative w-full h-full flex items-center justify-center transition-all duration-700"
          [style.transform]="isLoginForm ? 'rotate(0deg)' : 'rotate(-360deg)'">
       
-      <img [src]="isLoginForm ? 'tennis_ball.png' : '/soccer_ball.png'" 
+      <img [src]="isLoginForm ? '/soccer_ball.png' : '/basketball_ball.png'" 
            alt="ball" 
            class="w-[90%] h-[90%] object-contain drop-shadow-[0_35px_35px_rgba(0,0,0,0.5)] transition-all duration-300">
 
-      <div class="absolute text-white text-center w-48 z-30 flex flex-col items-center">
+      <div class="absolute text-white text-center w-48 z-30 flex flex-col items-center mb-20">
         <h3 class="font-black text-lg uppercase italic mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
           HELLO, WELCOME!
         </h3>
