@@ -94,7 +94,9 @@
            alt="ball" 
            class="w-[90%] h-[90%] object-contain drop-shadow-[0_35px_35px_rgba(0,0,0,0.5)] transition-all duration-300">
 
-      <div class="absolute text-white text-center w-48 z-30 flex flex-col items-center mb-20">
+<div class="absolute text-white text-center w-48 z-30 flex flex-col items-center"
+     [ngClass]="isLoginForm ? 'mb-1 mr-5' : 'mb-7 ml-0  '">
+
         <h3 class="font-black text-lg uppercase italic mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
           HELLO, WELCOME!
         </h3>

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, OnInit } from '@angular/core'; // <-- Am adăugat OnInit
+import { Component, ChangeDetectorRef, OnInit } from '@angular/core'; 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
@@ -10,7 +10,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
   templateUrl: './login.html',
   styleUrls: ['./login.css']
 })
-export class LoginComponent implements OnInit { // <-- Implementăm OnInit
+export class LoginComponent implements OnInit { 
   isLoginForm: boolean = true;
   
   // URL-ul primit de la backend pentru producție
@@ -80,7 +80,7 @@ export class LoginComponent implements OnInit { // <-- Implementăm OnInit
         // 3. Forțăm Angular să actualizeze HTML-ul înainte de alertă
         this.cdr.detectChanges();
         
-        // 4. Afișăm alerta de succes
+        // 4. Afișează alerta de succes
         alert('Te-ai autentificat cu succes!');
       },
       error: (err) => {
@@ -108,7 +108,7 @@ export class LoginComponent implements OnInit { // <-- Implementăm OnInit
         // 2. Forțăm actualizarea grafică
         this.cdr.detectChanges();
         
-        // 3. Afișăm alerta
+        // 3. Afișează alerta
         alert('Cont creat cu succes! Te poți autentifica acum.');
         
         // 4. Mutăm utilizatorul la Login și actualizăm fundalul
