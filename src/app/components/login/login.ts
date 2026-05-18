@@ -61,26 +61,24 @@ export class LoginComponent implements OnInit {
   }
 
   // Funcția de Login conectată la API-ul de pe Render
-  onLogin() {
+ onLogin() {
     console.log('Se trimit datele de login...', this.loginData);
     
-    this.http.post(`${this.apiUrl}/login`, this.loginData).subscribe({
+    // 1. Salvezi datele pe ascuns ca să le trimiți la API
+    const dateDeTrimis = { ...this.loginData };
+    
+    // 2. GOLEȘTI CASETELE INSTANT (Dispare textul de pe ecran la secundă)
+    this.loginData.email = '';
+    this.loginData.password = '';
+    this.cdr.detectChanges();
+    
+    // 3. Trimitem copia salvată către Render
+    this.http.post(`${this.apiUrl}/login`, dateDeTrimis).subscribe({
       next: (response: any) => {
         console.log('Login reușit!', response);
-        
-        // 1. Salvăm token-ul dacă există
         if (response && response.token) {
           localStorage.setItem('token', response.token);
         }
-        
-        // 2. Golește câmpurile instant de pe ecran
-        this.loginData.email = '';
-        this.loginData.password = '';
-        
-        // 3. Forțăm Angular să actualizeze HTML-ul înainte de alertă
-        this.cdr.detectChanges();
-        
-        // 4. Afișează alerta de succes
         alert('Te-ai autentificat cu succes!');
       },
       error: (err) => {
