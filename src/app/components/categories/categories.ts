@@ -1,40 +1,46 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-categories',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './categories.html',
   styleUrl: './categories.css'
 })
 export class Categories {
 
-  categories = [
+      categories = [
 
     {
       name: 'Football',
+      slug: 'Fotbal',
       image: 'football.jpg'
     },
 
     {
       name: 'Tennis',
-      image: 'venue1.jpg'
+      slug: 'Tenis',
+      image: 'hero.jpg'
     },
 
     {
       name: 'Basketball',
-      image: 'venue2.jpg'
+      slug: 'Baschet',
+      image: 'venue1.jpg'
     },
 
     {
       name: 'Volleyball',
-      image: 'venue3.jpg'
+      slug: 'Volei',
+      image: 'venue2.jpg'
     },
 
     {
       name: 'Padel',
-      image: 'hero.jpg'
+      slug: 'Padel',
+      image: 'venue3.jpg'
     }
 
   ];

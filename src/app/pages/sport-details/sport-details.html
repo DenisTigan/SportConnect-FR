@@ -1,0 +1,170 @@
+<app-details-header></app-details-header>
+
+<section class="details-page">
+
+  <!-- LEFT SIDE -->
+  <div class="left-side">
+
+    <!-- BIG IMAGE -->
+    <div class="hero-image">
+
+      <img
+        [src]="'/' + sportData.image"
+      >
+
+      <div class="image-overlay">
+
+        <span class="badge">
+          Premium Venue
+        </span>
+
+        <h1>
+          {{ sportData.title }}
+        </h1>
+
+        <p>
+          {{ sportData.description }}
+        </p>
+
+      </div>
+
+    </div>
+
+    <!-- FEATURES -->
+    <div class="features-section">
+
+      <div class="feature-card">
+        🚿
+        <span>Showers</span>
+      </div>
+
+      <div class="feature-card">
+        🚗
+        <span>Parking</span>
+      </div>
+
+      <div class="feature-card">
+        ☕
+        <span>Cafe</span>
+      </div>
+
+      <div class="feature-card">
+        🏟
+        <span>Premium Turf</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- RIGHT SIDE -->
+  <div class="booking-card">
+
+    <img
+      [src]="'/' + sportData.secondaryImage"
+    >
+
+    <div class="booking-content">
+
+      <!-- PRICE -->
+      <div class="price-box">
+
+        <span>
+          Price / hour
+        </span>
+
+        <h2>
+          €{{ sportData.price }}
+        </h2>
+
+      </div>
+
+      <!-- DATE -->
+      <div class="booking-section">
+
+        <label>
+          Select Date
+        </label>
+
+        <input type="date">
+
+      </div>
+
+      <!-- TIME -->
+      <div class="booking-section">
+
+        <label>
+          Select Time
+        </label>
+
+        <div class="time-slots">
+
+          <button>08:00</button>
+          <button>10:00</button>
+          <button>12:00</button>
+          <button>14:00</button>
+          <button>16:00</button>
+          <button>18:00</button>
+
+        </div>
+
+      </div>
+
+      <!-- PLAYERS -->
+      <div class="booking-section">
+
+        <label>
+          Players
+        </label>
+
+        <select>
+
+          <option>2 Players</option>
+          <option>4 Players</option>
+          <option>6 Players</option>
+          <option>10 Players</option>
+
+        </select>
+
+      </div>
+
+      <!-- SUMMARY -->
+      <div class="summary">
+
+        <div>
+          <span>Venue</span>
+          <strong>{{ sportData.title }}</strong>
+        </div>
+
+        <div>
+          <span>Total</span>
+          <strong>€{{ sportData.price }}</strong>
+        </div>
+
+      </div>
+
+      <!-- BUTTON -->
+      <button class="booking-btn">
+
+        Complete Booking
+
+      </button>
+
+      <!-- INFO -->
+      <div class="booking-info">
+
+        <p>✔ Instant confirmation</p>
+
+        <p>✔ Secure payment</p>
+
+        <p>✔ Free cancellation</p>
+
+      </div>
+
+</div>
+
+  </div>
+
+</section>
+
+<app-details-footer></app-details-footer>

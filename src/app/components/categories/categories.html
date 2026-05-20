@@ -1,34 +1,76 @@
 <section class="categories">
 
-  <div class="container">
+  <!-- TITLE -->
+  <div class="section-header">
+
+    <span>
+      PREMIUM SPORTS
+    </span>
 
     <h2>
       Choose Your Sport
     </h2>
 
-    <div class="grid">
+    <p>
+      Discover premium venues and book instantly.
+    </p>
 
-      <div
-        class="card"
+  </div>
 
-        *ngFor="let category of categories"
+  <!-- GRID -->
+  <div class="categories-grid">
+
+    <a
+      class="sport-card"
+
+      *ngFor="let category of categories"
+
+      [routerLink]="[
+        '/sport',
+        category.slug
+      ]"
+    >
+
+      <!-- IMAGE -->
+      <img
+        [src]="'/' + category.image"
       >
 
-        <img
-          [src]="'/' + category.image"
-        >
+      <!-- OVERLAY -->
+      <div class="overlay"></div>
 
-        <div class="overlay">
+      <!-- CONTENT -->
+      <div class="card-content">
+
+        <div class="top-row">
+
+          <span class="tag">
+            Popular
+          </span>
+
+        </div>
+
+        <div class="bottom-content">
 
           <h3>
             {{ category.name }}
           </h3>
 
+          <div class="explore">
+
+            Explore
+
+            <span>
+              →
+            </span>
+
+          </div>
+
         </div>
 
       </div>
 
-    </div>
+    </a>
 
   </div>
 

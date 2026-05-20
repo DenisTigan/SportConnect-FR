@@ -1,0 +1,82 @@
+<app-navbar></app-navbar>
+
+<section class="venues-page">
+
+  <!-- HEADER -->
+  <div class="page-header">
+
+    <span>
+      PREMIUM VENUES
+    </span>
+
+    <h1>
+      {{ category | titlecase }} Venues
+    </h1>
+
+    <p>
+      Discover and book premium sports venues instantly.
+    </p>
+
+  </div>
+
+  <!-- GRID -->
+  <div class="venues-grid">
+
+    <a
+
+      class="venue-card"
+
+      *ngFor="let venue of filteredVenues"
+
+      [routerLink]="[
+        '/venue',
+        venue.id
+      ]"
+    >
+
+      <!-- IMAGE -->
+      <img
+        [src]="'/' + venue.imageURL"
+      >
+
+      <!-- OVERLAY -->
+      <div class="overlay"></div>
+
+      <!-- CONTENT -->
+      <div class="card-content">
+
+        <div class="top-info">
+
+          <span>
+            {{ venue.location }}
+          </span>
+
+          <div class="price">
+            €{{ venue.pricePerHour }}
+          </div>
+
+        </div>
+
+        <div class="bottom-info">
+
+          <h2>
+            {{ venue.name }}
+          </h2>
+
+          <div class="book-btn">
+
+            Book Now →
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </a>
+
+  </div>
+
+</section>
+
+<app-footer></app-footer>
