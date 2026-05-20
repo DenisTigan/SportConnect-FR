@@ -2,6 +2,7 @@
 @import 'swiper/css/navigation';
 @import 'swiper/css/pagination';
 @import 'swiper/css/autoplay';
+@import 'tailwindcss';
 
 /* RESET */
 * {
@@ -116,4 +117,6 @@ html {
 
 .dark-mode p {
   color: #cbd5e1;
-} */
+} *//* You can add global styles to this file, and also import other style files */
+
+

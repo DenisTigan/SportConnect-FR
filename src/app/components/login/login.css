@@ -1,0 +1,45 @@
+/* Stilul global al componentei */
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.main-container {
+  width: 1050px;
+  height: 650px;
+  position: relative;
+}
+
+/* POZIȚIONAREA MINGII SPRE INTERIOR */
+
+/* Când este în stânga (Register) */
+.left-0-in {
+  left: 35px !important;
+}
+
+/* Când este în dreapta (Login) */
+/* Am folosit \/ pentru a scăpa caracterul slash din numele clasei */
+.left-1\/2-in {
+  left: calc(50% - 35px) !important;
+}
+
+/* Ajustări pentru imaginea mingii */
+/* Am adăugat selectorul de img direct pentru siguranță */
+.ball-outer-panel img, 
+div[class*='left-'] img {
+  filter: drop-shadow(0 20px 30px rgba(0,0,0,0.6));
+  pointer-events: none;
+}
+
+/* Forțăm tranziții line */
+.transition-all {
+  transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Shadow pentru input-uri la focus */
+input:focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  outline: none;
+}
