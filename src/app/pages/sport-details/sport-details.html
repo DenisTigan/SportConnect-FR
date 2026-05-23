@@ -1,170 +1,216 @@
-<app-details-header></app-details-header>
+<app-navbar></app-navbar>
 
-<section class="details-page">
+<div class="details-page">
 
-  <!-- LEFT SIDE -->
-  <div class="left-side">
+  <div
+    class="loading"
+    *ngIf="loading"
+  >
+    Loading...
+  </div>
 
-    <!-- BIG IMAGE -->
-    <div class="hero-image">
+  <div
+    class="details-container"
+    *ngIf="!loading && field"
+  >
+
+    <div class="image-section">
 
       <img
-        [src]="'/' + sportData.image"
+        [src]="field.imageURL"
+        [alt]="field.name"
       >
-
-      <div class="image-overlay">
-
-        <span class="badge">
-          Premium Venue
-        </span>
-
-        <h1>
-          {{ sportData.title }}
-        </h1>
-
-        <p>
-          {{ sportData.description }}
-        </p>
-
-      </div>
 
     </div>
 
-    <!-- FEATURES -->
-    <div class="features-section">
+    <div class="info-section">
 
-      <div class="feature-card">
-        🚿
-        <span>Showers</span>
+      <span class="category">
+        {{ field.category }}
+      </span>
+
+      <h1>
+        {{ field.name }}
+      </h1>
+
+      <p class="description">
+        {{ field.description }}
+      </p>
+
+      <div class="details-grid">
+
+        <div class="detail-box">
+          <span>Address</span>
+          <h3>{{ field.address }}</h3>
+        </div>
+
+        <div class="detail-box">
+          <span>Phone</span>
+          <h3>{{ field.phoneNumber }}</h3>
+        </div>
+
+        <div class="detail-box">
+          <span>Owner</span>
+          <h3>{{ field.ownerName }}</h3>
+        </div>
+
+        <div class="detail-box">
+          <span>Price</span>
+          <h3>{{ field.pricePerHour }} RON/h</h3>
+        </div>
+
+        <div class="detail-box">
+          <span>Open</span>
+          <h3>{{ field.openTime }}</h3>
+        </div>
+
+        <div class="detail-box">
+          <span>Close</span>
+          <h3>{{ field.closeTime }}</h3>
+        </div>
+
       </div>
 
-      <div class="feature-card">
-        🚗
-        <span>Parking</span>
+      <div class="features">
+
+        <div
+          class="feature"
+          *ngIf="field.hasLighting"
+        >
+          🌙 Lighting
+        </div>
+
+        <div
+          class="feature"
+          *ngIf="field.isIndoor"
+        >
+          🏟 Indoor
+        </div>
+
+        <div
+          class="feature"
+          *ngIf="!field.isIndoor"
+        >
+          🌤 Outdoor
+        </div>
+
       </div>
 
-      <div class="feature-card">
-        ☕
-        <span>Cafe</span>
+      <button
+        class="book-btn"
+        type="button"
+        (click)="openBooking()"
+      >
+        Book Now
+      </button>
+
+      <div
+        class="booking-box"
+        *ngIf="showBooking"
+      >
+
+        <h2>
+          Complete your booking
+        </h2>
+
+        <label>
+          Select date
+        </label>
+
+        <div class="date-picker">
+
+          <button
+            type="button"
+            class="date-card"
+            *ngFor="let date of visibleDates"
+            [class.active]="selectedDate === date.value"
+            (click)="selectDate(date.value)"
+          >
+
+            <span>
+              {{ date.dayName }}
+            </span>
+
+            <strong>
+              {{ date.dayNumber }}
+            </strong>
+
+            <small>
+              {{ date.month }}
+            </small>
+
+          </button>
+
+        </div>
+
+        <label>
+          Available hours
+        </label>
+
+        <div class="hours-grid">
+
+          <button
+            type="button"
+            class="hour-btn"
+            *ngFor="let hour of availableHours"
+            [class.active]="selectedHour === hour"
+            [class.blocked]="isBlocked(hour)"
+            [disabled]="isBlocked(hour)"
+            (click)="selectHour(hour)"
+          >
+            {{ hour }}
+          </button>
+
+        </div>
+
+        <div
+          class="booking-summary"
+          *ngIf="selectedHour"
+        >
+          <span>
+            Selected interval
+          </span>
+
+          <strong>
+            {{ bookingData.start }} - {{ bookingData.end }}
+          </strong>
+        </div>
+
+        <button
+          type="button"
+          class="confirm-btn"
+          (click)="confirmReservation(); $event.stopPropagation()"
+        >
+          Confirm Reservation
+        </button>
+
       </div>
 
-      <div class="feature-card">
-        🏟
-        <span>Premium Turf</span>
+      <div
+        class="success-message"
+        *ngIf="successMessage"
+      >
+        ✅ {{ successMessage }}
+      </div>
+
+      <div
+        class="error-message"
+        *ngIf="errorMessage"
+      >
+        ❌ {{ errorMessage }}
       </div>
 
     </div>
 
   </div>
 
-  <!-- RIGHT SIDE -->
-  <div class="booking-card">
-
-    <img
-      [src]="'/' + sportData.secondaryImage"
-    >
-
-    <div class="booking-content">
-
-      <!-- PRICE -->
-      <div class="price-box">
-
-        <span>
-          Price / hour
-        </span>
-
-        <h2>
-          €{{ sportData.price }}
-        </h2>
-
-      </div>
-
-      <!-- DATE -->
-      <div class="booking-section">
-
-        <label>
-          Select Date
-        </label>
-
-        <input type="date">
-
-      </div>
-
-      <!-- TIME -->
-      <div class="booking-section">
-
-        <label>
-          Select Time
-        </label>
-
-        <div class="time-slots">
-
-          <button>08:00</button>
-          <button>10:00</button>
-          <button>12:00</button>
-          <button>14:00</button>
-          <button>16:00</button>
-          <button>18:00</button>
-
-        </div>
-
-      </div>
-
-      <!-- PLAYERS -->
-      <div class="booking-section">
-
-        <label>
-          Players
-        </label>
-
-        <select>
-
-          <option>2 Players</option>
-          <option>4 Players</option>
-          <option>6 Players</option>
-          <option>10 Players</option>
-
-        </select>
-
-      </div>
-
-      <!-- SUMMARY -->
-      <div class="summary">
-
-        <div>
-          <span>Venue</span>
-          <strong>{{ sportData.title }}</strong>
-        </div>
-
-        <div>
-          <span>Total</span>
-          <strong>€{{ sportData.price }}</strong>
-        </div>
-
-      </div>
-
-      <!-- BUTTON -->
-      <button class="booking-btn">
-
-        Complete Booking
-
-      </button>
-
-      <!-- INFO -->
-      <div class="booking-info">
-
-        <p>✔ Instant confirmation</p>
-
-        <p>✔ Secure payment</p>
-
-        <p>✔ Free cancellation</p>
-
-      </div>
+  <div
+    class="empty"
+    *ngIf="!loading && !field"
+  >
+    Nu am găsit terenul selectat.
+  </div>
 
 </div>
 
-  </div>
-
-</section>
-
-<app-details-footer></app-details-footer>
+<app-footer></app-footer>

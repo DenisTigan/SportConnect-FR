@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { Field } from './field';
+import { Field } from './field.service';
 
 describe('Field', () => {
   let service: Field;

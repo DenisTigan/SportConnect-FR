@@ -1,82 +1,58 @@
 <app-navbar></app-navbar>
 
-<section class="venues-page">
+<div class="venues-page">
 
-  <!-- HEADER -->
-  <div class="page-header">
+  <h1 class="title">
+    {{ category }} Venues
+  </h1>
 
-    <span>
-      PREMIUM VENUES
-    </span>
-
-    <h1>
-      {{ category | titlecase }} Venues
-    </h1>
-
-    <p>
-      Discover and book premium sports venues instantly.
-    </p>
-
+  <div *ngIf="loading">
+    Loading...
   </div>
 
-  <!-- GRID -->
-  <div class="venues-grid">
+  <div
+    class="venues-grid"
+    *ngIf="!loading && fields.length > 0"
+  >
 
-    <a
-
+    <div
       class="venue-card"
-
-      *ngFor="let venue of filteredVenues"
-
-      [routerLink]="[
-        '/venue',
-        venue.id
-      ]"
+      *ngFor="let field of fields"
+      [routerLink]="['/venue', field.id]"
     >
 
-      <!-- IMAGE -->
       <img
-        [src]="'/' + venue.imageURL"
+        [src]="field.imageURL"
+        alt=""
       >
 
-      <!-- OVERLAY -->
-      <div class="overlay"></div>
+      <div class="overlay">
 
-      <!-- CONTENT -->
-      <div class="card-content">
+        <h2>
+          {{ field.name }}
+        </h2>
 
-        <div class="top-info">
+        <p>
+          {{ field.address }}
+        </p>
 
-          <span>
-            {{ venue.location }}
-          </span>
-
-          <div class="price">
-            €{{ venue.pricePerHour }}
-          </div>
-
-        </div>
-
-        <div class="bottom-info">
-
-          <h2>
-            {{ venue.name }}
-          </h2>
-
-          <div class="book-btn">
-
-            Book Now →
-
-          </div>
-
-        </div>
+        <span>
+          {{ field.pricePerHour }} RON / hour
+        </span>
 
       </div>
 
-    </a>
+    </div>
 
   </div>
 
-</section>
+  <div
+    class="empty"
+    *ngIf="!loading && fields.length === 0"
+  >
+    Nu există terenuri pentru {{ category }}.
+  </div>
+
+</div>
 
 <app-footer></app-footer>

@@ -1,0 +1,144 @@
+<app-navbar></app-navbar>
+
+<section class="account-page">
+
+  <div
+    class="loading"
+    *ngIf="loading"
+  >
+    Loading account...
+  </div>
+
+  <div
+    class="account-card"
+    *ngIf="!loading && user"
+  >
+
+    <div class="account-header">
+
+      <div class="avatar">
+        {{ user.firstName?.charAt(0) }}
+        {{ user.lastName?.charAt(0) }}
+      </div>
+
+      <div class="account-title">
+
+        <h1>
+          My Account
+        </h1>
+
+        <p>
+          Manage your profile information and account security.
+        </p>
+
+      </div>
+
+    </div>
+
+    <div class="account-grid">
+
+      <div class="form-section">
+
+        <h2>
+          Profile Details
+        </h2>
+
+        <label>
+          First Name
+        </label>
+
+        <input
+          type="text"
+          [(ngModel)]="profileData.firstName"
+        >
+
+        <label>
+          Last Name
+        </label>
+
+        <input
+          type="text"
+          [(ngModel)]="profileData.lastName"
+        >
+
+        <label>
+          Phone Number
+        </label>
+
+        <input
+          type="text"
+          [(ngModel)]="profileData.phoneNumber"
+        >
+
+        <button
+          class="save-btn"
+          (click)="saveProfile()"
+        >
+          Save Profile
+        </button>
+
+      </div>
+
+      <div class="form-section">
+
+        <h2>
+          Change Password
+        </h2>
+
+        <label>
+          Current Password
+        </label>
+
+        <input
+          type="password"
+          [(ngModel)]="passwordData.currentPassword"
+        >
+
+        <label>
+          New Password
+        </label>
+
+        <input
+          type="password"
+          [(ngModel)]="passwordData.newPassword"
+        >
+
+        <label>
+          Confirm New Password
+        </label>
+
+        <input
+          type="password"
+          [(ngModel)]="passwordData.confirmNewPassword"
+        >
+
+        <button
+          class="save-btn password-btn"
+          (click)="updatePassword()"
+        >
+          Change Password
+        </button>
+
+      </div>
+
+    </div>
+
+    <div
+      class="success-message"
+      *ngIf="successMessage"
+    >
+      ✅ {{ successMessage }}
+    </div>
+
+    <div
+      class="error-message"
+      *ngIf="errorMessage"
+    >
+      ❌ {{ errorMessage }}
+    </div>
+
+  </div>
+
+</section>
+
+<app-footer></app-footer>

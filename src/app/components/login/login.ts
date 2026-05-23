@@ -1,7 +1,8 @@
-import { Component, ChangeDetectorRef, OnInit } from '@angular/core'; 
+import { Component, ChangeDetectorRef, OnInit, OnDestroy } from '@angular/core'; 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -10,7 +11,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
   templateUrl: './login.html',
   styleUrls: ['./login.css']
 })
-export class LoginComponent implements OnInit { 
+export class LoginComponent implements OnInit, OnDestroy { 
   isLoginForm: boolean = true;
   
   // URL-ul primit de la backend pentru producție
@@ -32,7 +33,8 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private http: HttpClient, 
-    private cdr: ChangeDetectorRef 
+    private cdr: ChangeDetectorRef,
+    private router: Router 
   ) {}
 
   // Această funcție rulează automat când se deschide pagina
@@ -80,6 +82,7 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('token', response.token);
         }
         alert('Te-ai autentificat cu succes!');
+        this.router.navigate(['/']);
       },
       error: (err) => {
         console.error('Eroare la login:', err);
@@ -120,4 +123,9 @@ export class LoginComponent implements OnInit {
       }
     });
   }
+  ngOnDestroy(): void {
+
+  document.body.style.backgroundImage = '';
+
+}
 }

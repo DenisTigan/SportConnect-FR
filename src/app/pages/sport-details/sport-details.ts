@@ -1,201 +1,306 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectorRef,
+  NgZone
+} from '@angular/core';
 
 import { CommonModule } from '@angular/common';
-
 import { ActivatedRoute } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
-import { DetailsHeader } from '../../components/details-header/details-header';
-
-import { DetailsFooter } from '../../components/details-footer/details-footer';
+import { Navbar } from '../../components/navbar/navbar';
+import { Footer } from '../../components/footer/footer';
+import { FieldService } from '../../services/field.service';
+import { ReservationService } from '../../services/reservation.service';
 
 @Component({
   selector: 'app-sport-details',
-
   standalone: true,
-
   imports: [
     CommonModule,
-    DetailsHeader,
-    DetailsFooter
+    Navbar,
+    Footer,
+    FormsModule
   ],
-
   templateUrl: './sport-details.html',
-
   styleUrl: './sport-details.css'
 })
-
 export class SportDetails implements OnInit {
 
-  venueId = 0;
+  field: any = null;
+  loading = true;
+  showBooking = false;
 
-  sportData: any;
+  successMessage = '';
+  errorMessage = '';
 
-  venues = [
+  selectedDate = '';
+  selectedHour = '';
 
-    {
-      id: 1,
-      sport: 'football',
-      title: 'Arena One',
-      description:'Premium football venue with modern facilities and professional turf.',
-      image: 'FotbalTeren1.jpg',
-      secondaryImage: 'FotbalTeren1.jpg',
-      price: 80
-    },
-    {
-      id: 2,
-      sport: 'football',
-      title: 'Champions Field',
-      description:'Elite football experience designed for competitive matches.',
-      image: 'FotbalTeren2.jpg',
-      secondaryImage: 'FotbalTeren2.jpg',
-      price: 60
-    },
-    {
-      id: 3,
-      sport: 'football',
-      title: 'Elite Stadium',
-      description:'Modern stadium with premium atmosphere and quality services.',
-      image: 'FotbalTeren3.jpg',
-      secondaryImage: 'FotbalTeren3.jpg',
-      price: 75
-    },
+  visibleDates: any[] = [];
 
+  bookingData = {
+    date: '',
+    start: '',
+    end: ''
+  };
 
-    {
-      id: 4,
-      sport: 'tennis',
-      title: 'Tennis Play',
-      description:'Premium tennis venue with modern facilities and professional turf.',
-      image: 'TenisTeren1.jpg',
-      secondaryImage: 'TenisTeren1.jpg',
-      price: 50
-    },
-    {
-      id: 5,
-      sport: 'tennis',
-      title: 'Tennis',
-      description:'Elite tennis experience designed for competitive matches.',
-      image: 'TenisTeren2.jpg',
-      secondaryImage: 'TenisTeren2.jpg',
-      price: 30
-    },
-    {
-      id: 6,
-      sport: 'tennis',
-      title: 'Salca Tennis',
-      description:'Modern stadium with premium atmosphere and quality services.',
-      image: 'TenisTeren3.jpg',
-      secondaryImage: 'TenisTeren3.jpg',
-      price: 60
-    },
-
-
-    {
-      id: 7,
-      sport: 'basketball',
-      title: 'Baschet LPS',
-      description:'Premium basketball venue with modern facilities and professional turf.',
-      image: 'BaschetTeren1.jpg',
-      secondaryImage: 'BaschetTeren1.jpg',
-      price: 80
-    },
-    {
-      id: 8,
-      sport: 'basketball',
-      title: 'Baschet CSM',
-      description:'Elite basketball experience designed for competitive matches.',
-      image: 'BaschetTeren2.jpg',
-      secondaryImage: 'BaschetTeren2.jpg',
-      price: 65
-    },
-    {
-      id: 9,
-      sport: 'basketball',
-      title: 'Baschet Sport',
-      description:'Modern stadium with premium atmosphere and quality services.',
-      image: 'BaschetTeren3.jpg',
-      secondaryImage: 'BaschetTeren3.jpg',
-      price: 75
-    },
-
-
-    {
-      id: 10,
-      sport: 'volleyball',
-      title: 'Volei Top',
-      description:'Premium volleyball venue with modern facilities and professional turf.',
-      image: 'VoleiTeren1.jpg',
-      secondaryImage: 'VoleiTeren1.jpg',
-      price: 55
-    },
-    {
-      id: 11,
-      sport: 'volleyball',
-      title: 'Volei Play',
-      description:'Elite volleyball experience designed for competitive matches.',
-      image: 'VoleiTeren2.jpg',
-      secondaryImage: 'VoleiTeren2.jpg',
-      price: 40
-    },
-    {
-      id: 12,
-      sport: 'volleyball',
-      title: 'Volei Sport',
-      description:'Modern stadium with premium atmosphere and quality services.',
-      image: 'VoleiTeren3.jpg',
-      secondaryImage: 'VoleiTeren3.jpg',
-      price: 60
-    },
-
-
-    {
-      id: 13,
-      sport: 'padel',
-      title: 'Padel Top',
-      description:'Professional padel courts with modern surfaces.',
-      image: 'PadelTeren1.jpg',
-      secondaryImage: 'PadelTeren1.jpg',
-      price: 90
-    },
-    {
-      id: 14,
-      sport: 'padel',
-      title: 'Padel Sport',
-      description:'Professional padel courts with modern surfaces.',
-      image: 'PadelTeren2.jpg',
-      secondaryImage: 'PadelTeren2.jpg',
-      price: 80
-    },
-    {
-      id: 15,
-      sport: 'padel',
-      title: 'Padel Arena',
-      description:'Premium indoor padel courts with luxury facilities.',
-      image: 'PadelTeren3.jpg',
-      secondaryImage: 'PadelTeren3.jpg',
-      price: 70
-    }
-
+  availableHours: string[] = [
+    '08:00',
+    '09:00',
+    '10:00',
+    '11:00',
+    '12:00',
+    '13:00',
+    '14:00',
+    '15:00',
+    '16:00',
+    '17:00',
+    '18:00',
+    '19:00',
+    '20:00',
+    '21:00',
+    '22:00'
   ];
 
+  blockedHours: string[] = [];
+
   constructor(
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private fieldService: FieldService,
+    private cdr: ChangeDetectorRef,
+    private zone: NgZone,
+    private reservationService: ReservationService
   ) {}
 
   ngOnInit(): void {
+    this.generateDates();
 
-    this.route.params.subscribe(params => {
+    this.route.paramMap.subscribe(params => {
+      const id = Number(params.get('id'));
 
-      this.venueId =
-        Number(params['id']);
+      console.log('DETAILS ID:', id);
 
-      this.sportData =
-        this.venues.find(
-          venue => venue.id === this.venueId
-        );
+      if (!id) {
+        this.loading = false;
+        return;
+      }
 
+      this.loadField(id);
     });
-
   }
 
+  generateDates(): void {
+    const today = new Date();
+
+    this.visibleDates = [];
+
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(today);
+
+      date.setDate(today.getDate() + i);
+
+      const value =
+        date.toISOString().split('T')[0];
+
+      this.visibleDates.push({
+        value,
+        dayName: date.toLocaleDateString('ro-RO', {
+          weekday: 'short'
+        }),
+        dayNumber: date.getDate(),
+        month: date.toLocaleDateString('ro-RO', {
+          month: 'short'
+        })
+      });
+    }
+  }
+
+  loadField(id: number): void {
+    this.loading = true;
+
+    this.fieldService
+      .getFieldById(id)
+      .subscribe({
+        next: (data: any) => {
+          console.log('FIELD DETAILS:', data);
+
+          this.zone.run(() => {
+            this.field = data;
+            this.loading = false;
+            this.cdr.detectChanges();
+          });
+        },
+
+        error: (err: any) => {
+          console.log('FIELD DETAILS ERROR:', err);
+
+          this.zone.run(() => {
+            this.loading = false;
+            this.cdr.detectChanges();
+          });
+        }
+      });
+  }
+
+  openBooking(): void {
+    this.showBooking = true;
+    this.successMessage = '';
+    this.errorMessage = '';
+  }
+
+  selectDate(date: string): void {
+    this.selectedDate = date;
+    this.loadOccupiedHours();
+  }
+
+  loadOccupiedHours(): void {
+    this.blockedHours = [];
+    this.selectedHour = '';
+
+    this.bookingData.start = '';
+    this.bookingData.end = '';
+
+    if (!this.field || !this.selectedDate) {
+      return;
+    }
+
+    this.reservationService
+      .getOccupiedReservations(
+        this.field.id,
+        this.selectedDate
+      )
+      .subscribe({
+        next: (reservations: any[]) => {
+          console.log(
+            'OCCUPIED RESERVATIONS:',
+            reservations
+          );
+
+          this.blockedHours =
+            reservations.map(reservation =>
+              reservation.startTime.substring(11, 16)
+            );
+
+          console.log(
+            'BLOCKED HOURS:',
+            this.blockedHours
+          );
+
+          this.cdr.detectChanges();
+        },
+
+        error: (err: any) => {
+          console.log('OCCUPIED ERROR:', err);
+        }
+      });
+  }
+
+  selectHour(hour: string): void {
+    if (this.isBlocked(hour)) {
+      return;
+    }
+
+    this.selectedHour = hour;
+    this.bookingData.start = hour;
+
+    const nextHour =
+      Number(hour.split(':')[0]) + 1;
+
+    this.bookingData.end =
+      `${nextHour.toString().padStart(2, '0')}:00`;
+  }
+
+  isBlocked(hour: string): boolean {
+    return this.blockedHours.includes(hour);
+  }
+
+  confirmReservation(): void {
+    console.log('BUTON APASAT');
+
+    this.successMessage = '';
+    this.errorMessage = '';
+
+    this.bookingData.date = this.selectedDate;
+
+    if (!this.field) {
+      this.errorMessage =
+        'Terenul nu este încărcat.';
+      return;
+    }
+
+    if (
+      !this.bookingData.date ||
+      !this.bookingData.start ||
+      !this.bookingData.end
+    ) {
+      this.errorMessage =
+        'Alege data și ora rezervării.';
+      return;
+    }
+
+    const startTime =
+      `${this.bookingData.date}T${this.bookingData.start}:00`;
+
+    const endTime =
+      `${this.bookingData.date}T${this.bookingData.end}:00`;
+
+    const reservation = {
+      fieldId: this.field.id,
+      startTime,
+      endTime
+    };
+
+    console.log('RESERVATION PAYLOAD:', reservation);
+
+    this.reservationService
+      .createReservation(reservation)
+      .subscribe({
+        next: (res: any) => {
+          console.log(
+            'RESERVATION RESPONSE:',
+            res
+          );
+
+          this.zone.run(() => {
+            this.successMessage =
+              'Rezervarea a fost creată cu succes!';
+
+            this.errorMessage = '';
+
+            this.showBooking = false;
+
+            this.selectedDate = '';
+            this.selectedHour = '';
+
+            this.bookingData = {
+              date: '',
+              start: '',
+              end: ''
+            };
+
+            this.blockedHours = [];
+
+            this.cdr.detectChanges();
+          });
+        },
+
+        error: (err: any) => {
+          console.log(
+            'RESERVATION ERROR:',
+            err
+          );
+
+          this.zone.run(() => {
+            this.errorMessage =
+              'Rezervarea a eșuat. Verifică intervalul ales.';
+
+            this.successMessage = '';
+
+            this.cdr.detectChanges();
+          });
+        }
+      });
+  }
 }

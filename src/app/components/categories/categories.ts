@@ -22,25 +22,25 @@ export class Categories {
     {
       name: 'Tennis',
       slug: 'Tenis',
-      image: 'hero.jpg'
+      image: 'tennis.jpg'
     },
 
     {
       name: 'Basketball',
       slug: 'Baschet',
-      image: 'venue1.jpg'
+      image: 'basketball.jpg'
     },
 
     {
       name: 'Volleyball',
       slug: 'Volei',
-      image: 'venue2.jpg'
+      image: 'volleyball.jpg'
     },
 
     {
       name: 'Padel',
       slug: 'Padel',
-      image: 'venue3.jpg'
+      image: 'padel.jpg'
     }
 
   ];

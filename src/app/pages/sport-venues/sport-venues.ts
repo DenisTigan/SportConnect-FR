@@ -1,88 +1,72 @@
-import { Component, OnInit } from '@angular/core';
-
+import { Component, OnInit, ChangeDetectorRef, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
-import { Navbar }
-from '../../components/navbar/navbar';
-
-import { Footer }
-from '../../components/footer/footer';
-
-import {
-  ActivatedRoute,
-  RouterLink
-} from '@angular/router';
-
-import { FieldService }
-from '../../services/field';
+import { Navbar } from '../../components/navbar/navbar';
+import { Footer } from '../../components/footer/footer';
+import { FieldService } from '../../services/field.service';
 
 @Component({
   selector: 'app-sport-venues',
-
   standalone: true,
-
   imports: [
     CommonModule,
     RouterLink,
     Navbar,
     Footer
   ],
-
   templateUrl: './sport-venues.html',
-
   styleUrl: './sport-venues.css'
 })
-
-export class SportVenues
-implements OnInit {
+export class SportVenues implements OnInit {
 
   category = '';
-
-  filteredVenues: any[] = [];
+  fields: any[] = [];
+  loading = true;
 
   constructor(
-
     private route: ActivatedRoute,
-
-    private fieldService: FieldService
-
+    private fieldService: FieldService,
+    private cdr: ChangeDetectorRef,
+    private zone: NgZone
   ) {}
 
   ngOnInit(): void {
+    this.route.paramMap.subscribe(params => {
+      this.category = params.get('category') || '';
 
-    this.route.params.subscribe(params => {
+      console.log('CATEGORY:', this.category);
 
-      this.category =
-        params['category'];
-
-      this.loadFields();
-
+      if (this.category) {
+        this.loadFields();
+      }
     });
-
   }
 
-  loadFields() {
+  loadFields(): void {
+    this.loading = true;
+    this.fields = [];
 
-    this.fieldService
-      .getFieldsByCategory(this.category)
-      .subscribe({
+    this.fieldService.getFieldsByCategory(this.category).subscribe({
+      next: (data: any) => {
+        console.log('FIELDS FROM BACKEND:', data);
 
-        next: (data: any) => {
+        this.zone.run(() => {
+          this.fields = Array.isArray(data) ? data : [];
+          this.loading = false;
+          this.cdr.detectChanges();
+        });
+      },
 
-          this.filteredVenues = data;
+      error: (err: any) => {
+        console.log('EROARE BACKEND:', err);
 
-          console.log(data);
-
-        },
-
-        error: (err: any) => {
-
-          console.log(err);
-
-        }
-
-      });
-
+        this.zone.run(() => {
+          this.loading = false;
+          this.fields = [];
+          this.cdr.detectChanges();
+        });
+      }
+    });
   }
-
 }

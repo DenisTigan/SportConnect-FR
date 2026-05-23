@@ -1,41 +1,53 @@
 <nav class="navbar">
+
   <div class="container nav-content">
 
-    <div class="logo">SportConnect</div>
-
-    <div class="links">
-      <a>Find a Court</a>
-      <a>Become a Partner</a>
+    <div
+      class="logo"
+      routerLink="/"
+    >
+      SportConnect
     </div>
 
-    <button class="login-btn">Login</button>
+    <div
+      class="links"
+      [class.active]="menuOpen"
+    >
 
-  </div>
-</nav>
+      <a routerLink="/">
+        Home
+      </a>
 
-<nav class="navbar">
+      <a
+        routerLink="/"
+        fragment="sports"
+      >
+        Find a Court
+      </a>
 
-  <div class="container nav-content">
+      <a routerLink="/partner">
+        Become a Partner
+      </a>
 
-    <div class="logo">SportConnect</div>
+      <a routerLink="/account">
+        My Account
+      </a>
 
-    <div class="links" [class.active]="menuOpen">
-      <a>Find a Court</a>
-      <a>Become a Partner</a>
-      <a>Contact</a>
     </div>
 
     <div class="actions">
 
-      <!-- <button class="theme-btn" (click)="toggleTheme()">
-        🌙
-      </button> -->
-
-      <button class="login-btn">
-        Login
+      <button
+        class="login-btn"
+        (click)="logout()"
+      >
+        Logout
       </button>
 
-      <div class="hamburger" (click)="toggleMenu()">
+      <div
+        class="hamburger"
+        (click)="toggleMenu()"
+      >
         ☰
       </div>
 
