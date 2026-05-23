@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectorRef,
+  NgZone
+} from '@angular/core';
+
 import { CommonModule } from '@angular/common';
 
 import { Navbar } from '../../components/navbar/navbar';
@@ -22,7 +28,9 @@ export class MyReservations implements OnInit {
   loading = true;
 
   constructor(
-    private reservationService: ReservationService
+    private reservationService: ReservationService,
+    private cdr: ChangeDetectorRef,
+    private zone: NgZone
   ) {}
 
   ngOnInit(): void {
@@ -34,13 +42,21 @@ export class MyReservations implements OnInit {
 
     this.reservationService.getMyHistory().subscribe({
       next: (data: any[]) => {
-        this.reservations = data;
-        this.loading = false;
+        this.zone.run(() => {
+          this.reservations = Array.isArray(data) ? data : [];
+          this.loading = false;
+          this.cdr.detectChanges();
+        });
       },
 
       error: (err: any) => {
         console.log('RESERVATIONS ERROR:', err);
-        this.loading = false;
+
+        this.zone.run(() => {
+          this.reservations = [];
+          this.loading = false;
+          this.cdr.detectChanges();
+        });
       }
     });
   }
