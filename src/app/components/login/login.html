@@ -16,7 +16,6 @@
 
   <div class="forms-wrapper">
 
-    <!-- LOGIN -->
     <div
       class="form-panel login-panel"
       [class.hidden]="!isLoginForm"
@@ -47,18 +46,30 @@
       >
 
       <button
+        type="button"
         (click)="onLogin()"
+        [disabled]="loading"
       >
         {{
           loading
-            ? 'Loading...'
+            ? 'Se autentifică...'
             : 'Autentificare'
         }}
       </button>
 
+      <div class="mobile-switch">
+
+        <button
+          type="button"
+          (click)="toggleForm()"
+        >
+          Create account
+        </button>
+
+      </div>
+
     </div>
 
-    <!-- REGISTER -->
     <div
       class="form-panel register-panel"
       [class.hidden]="isLoginForm"
@@ -111,21 +122,33 @@
       >
 
       <button
+        type="button"
         class="green"
         (click)="onRegister()"
+        [disabled]="loading"
       >
         {{
           loading
-            ? 'Loading...'
+            ? 'Se creează...'
             : 'Înregistrare'
         }}
       </button>
+
+      <div class="mobile-switch">
+
+        <button
+          type="button"
+          (click)="toggleForm()"
+        >
+          Back to login
+        </button>
+
+      </div>
 
     </div>
 
   </div>
 
-  <!-- BALL -->
   <div class="ball-side">
 
     <img
@@ -151,6 +174,7 @@
       </p>
 
       <button
+        type="button"
         class="switch-btn"
         (click)="toggleForm()"
       >

@@ -6,7 +6,6 @@ import {
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
-
 import { FormsModule } from '@angular/forms';
 
 import {
@@ -18,29 +17,21 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
-
   standalone: true,
-
   imports: [
     CommonModule,
     FormsModule,
     HttpClientModule
   ],
-
   templateUrl: './login.html',
-
   styleUrl: './login.css'
 })
-
-export class LoginComponent
-implements OnInit, OnDestroy {
+export class LoginComponent implements OnInit, OnDestroy {
 
   isLoginForm = true;
-
   loading = false;
 
   successMessage = '';
-
   errorMessage = '';
 
   private apiUrl =
@@ -66,64 +57,41 @@ implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-
     this.actualizeazaFundalul();
-
   }
 
   ngOnDestroy(): void {
-
     document.body.style.backgroundImage = '';
-
   }
 
   toggleForm(): void {
-
     this.clearMessages();
-
     this.isLoginForm = !this.isLoginForm;
-
     this.actualizeazaFundalul();
-
   }
 
   private actualizeazaFundalul(): void {
-
     document.body.style.backgroundImage =
       this.isLoginForm
         ? "url('/fundal_fotbal.jpg')"
         : "url('/fundal_bascket.png')";
 
     document.body.style.backgroundSize = 'cover';
-
     document.body.style.backgroundPosition = 'center';
-
     document.body.style.backgroundRepeat = 'no-repeat';
-
   }
 
   onLogin(): void {
-
     this.clearMessages();
 
     if (!this.loginData.email.trim()) {
-
-      this.showError(
-        'Introdu emailul.'
-      );
-
+      this.showError('Introdu emailul.');
       return;
-
     }
 
     if (!this.loginData.password.trim()) {
-
-      this.showError(
-        'Introdu parola.'
-      );
-
+      this.showError('Introdu parola.');
       return;
-
     }
 
     this.loading = true;
@@ -132,101 +100,61 @@ implements OnInit, OnDestroy {
       `${this.apiUrl}/login`,
       this.loginData
     ).subscribe({
-
       next: (response: any) => {
-
         this.loading = false;
 
-        if (
-          response &&
-          response.token
-        ) {
-
-          localStorage.setItem(
-            'token',
-            response.token
-          );
-
+        if (response && response.token) {
+          localStorage.setItem('token', response.token);
         }
 
-        this.showSuccess(
-          'Autentificare reușită!'
-        );
+        this.showSuccess('Autentificare reușită!');
 
         setTimeout(() => {
-
           this.router.navigate(['/']);
-
         }, 800);
-
       },
 
       error: (err: any) => {
-
         console.log(err);
 
         this.loading = false;
 
-        this.showError(
-          'Email sau parolă greșită.'
-        );
+        if (
+          err.status === 401 ||
+          err.status === 403 ||
+          err.status === 400
+        ) {
+          this.showError('Email sau parolă incorectă.');
+        } else {
+          this.showError('Server error. Încearcă mai târziu.');
+        }
 
+        this.cdr.detectChanges();
       }
-
     });
-
   }
 
   onRegister(): void {
-
     this.clearMessages();
 
-    if (
-      !this.registerData.firstName.trim()
-    ) {
-
-      this.showError(
-        'Introdu prenumele.'
-      );
-
+    if (!this.registerData.firstName.trim()) {
+      this.showError('Introdu prenumele.');
       return;
-
     }
 
-    if (
-      !this.registerData.lastName.trim()
-    ) {
-
-      this.showError(
-        'Introdu numele.'
-      );
-
+    if (!this.registerData.lastName.trim()) {
+      this.showError('Introdu numele.');
       return;
-
     }
 
-    if (
-      !this.registerData.email.trim()
-    ) {
-
-      this.showError(
-        'Introdu emailul.'
-      );
-
+    if (!this.registerData.email.trim()) {
+      this.showError('Introdu emailul.');
       return;
-
     }
 
-    if (
-      this.registerData.password.length < 6
-    ) {
-
-      this.showError(
-        'Parola trebuie să aibă minim 6 caractere.'
-      );
-
+    if (this.registerData.password.length < 6) {
+      this.showError('Parola trebuie să aibă minim 6 caractere.');
       return;
-
     }
 
     this.loading = true;
@@ -238,14 +166,10 @@ implements OnInit, OnDestroy {
         responseType: 'text'
       }
     ).subscribe({
-
       next: () => {
-
         this.loading = false;
 
-        this.showSuccess(
-          'Cont creat cu succes!'
-        );
+        this.showSuccess('Cont creat cu succes!');
 
         this.registerData = {
           firstName: '',
@@ -256,71 +180,50 @@ implements OnInit, OnDestroy {
         };
 
         setTimeout(() => {
-
           this.isLoginForm = true;
-
           this.actualizeazaFundalul();
-
           this.cdr.detectChanges();
-
         }, 1200);
-
       },
 
       error: (err: any) => {
-
         console.log(err);
 
         this.loading = false;
 
-        this.showError(
-          'Înregistrarea a eșuat.'
-        );
+        if (err.status === 400) {
+          this.showError('Emailul există deja sau datele sunt invalide.');
+        } else {
+          this.showError('Înregistrarea a eșuat.');
+        }
 
+        this.cdr.detectChanges();
       }
-
     });
-
   }
 
-  private showSuccess(
-    message: string
-  ): void {
-
+  private showSuccess(message: string): void {
     this.successMessage = message;
-
     this.errorMessage = '';
 
     setTimeout(() => {
-
       this.successMessage = '';
-
+      this.cdr.detectChanges();
     }, 3500);
-
   }
 
-  private showError(
-    message: string
-  ): void {
-
+  private showError(message: string): void {
     this.errorMessage = message;
-
     this.successMessage = '';
 
     setTimeout(() => {
-
       this.errorMessage = '';
-
+      this.cdr.detectChanges();
     }, 4000);
-
   }
 
   private clearMessages(): void {
-
     this.successMessage = '';
-
     this.errorMessage = '';
-
   }
-
 }

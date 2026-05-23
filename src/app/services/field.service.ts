@@ -41,4 +41,12 @@ export class FieldService {
       this.getHeaders()
     );
   }
+
+  getAllFields() {
+
+    return this.http.get(
+      `${this.apiUrl}/all`
+    );
+
+  }
 }

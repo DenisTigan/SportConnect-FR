@@ -11,18 +11,30 @@
         Discover and book premium sports venues in seconds.
       </p>
 
-      <div class="search-box fade-up delay-2">
-        <input placeholder="City">
-        <input type="date">
-        <input type="time">
+     <div class="hero-search">
 
-        <select>
-          <option>Tennis</option>
-          <option>Football</option>
-        </select>
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        placeholder="Caută un teren..."
+        (keyup.enter)="searchField()"
+      >
 
-        <button>Search</button>
-      </div>
+      <button
+        type="button"
+        (click)="searchField()"
+      >
+        Search
+      </button>
+
+    </div>
+
+    <p
+      class="search-error"
+      *ngIf="errorMessage"
+    >
+      {{ errorMessage }}
+    </p>
 
     </div>
 
