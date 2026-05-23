@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit {
       document.body.style.backgroundImage = "url('/fundal_fotbal.jpg')";
     } else {
       // Când este pe REGISTER (mingea de fotbal) -> punem terenul de fotbal
-      document.body.style.backgroundImage = "url('/fundal_bascket.avif')";
+      document.body.style.backgroundImage = "url('/fundal_bascket.png')";
     }
     // Ne asigurăm că proprietățile de cover sunt păstandențiale
     document.body.style.backgroundSize = "cover";
