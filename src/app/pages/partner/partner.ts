@@ -12,16 +12,21 @@ import { PartnerService } from '../../services/partner.service';
 
 @Component({
   selector: 'app-partner',
+
   standalone: true,
+
   imports: [
     CommonModule,
     FormsModule,
     Navbar,
     Footer
   ],
+
   templateUrl: './partner.html',
+
   styleUrl: './partner.css'
 })
+
 export class Partner {
 
   loading = false;
@@ -44,31 +49,37 @@ export class Partner {
   ) {}
 
   submitPartnerRequest(): void {
+
     this.successMessage = '';
     this.errorMessage = '';
 
     if (!this.partnerData.businessName.trim()) {
-      this.errorMessage = 'Business name is required.';
+      this.errorMessage =
+        'Business name is required.';
       return;
     }
 
     if (!this.partnerData.phoneNumber.trim()) {
-      this.errorMessage = 'Phone number is required.';
+      this.errorMessage =
+        'Phone number is required.';
       return;
     }
 
     if (!this.partnerData.city.trim()) {
-      this.errorMessage = 'City is required.';
+      this.errorMessage =
+        'City is required.';
       return;
     }
 
     if (!this.partnerData.address.trim()) {
-      this.errorMessage = 'Address is required.';
+      this.errorMessage =
+        'Address is required.';
       return;
     }
 
     if (!this.partnerData.sportCategory.trim()) {
-      this.errorMessage = 'Sport category is required.';
+      this.errorMessage =
+        'Sport category is required.';
       return;
     }
 
@@ -77,13 +88,20 @@ export class Partner {
     this.partnerService
       .submitRequest(this.partnerData)
       .subscribe({
+
         next: (res: any) => {
-          console.log('PARTNER REQUEST:', res);
+
+          console.log(
+            'PARTNER REQUEST:',
+            res
+          );
 
           this.loading = false;
 
           this.successMessage =
-            'Your partner request was submitted successfully!';
+            'Partner request submitted successfully!';
+
+          this.errorMessage = '';
 
           this.partnerData = {
             businessName: '',
@@ -97,20 +115,31 @@ export class Partner {
           setTimeout(() => {
             this.successMessage = '';
           }, 4000);
+
         },
 
         error: (err: any) => {
-          console.log('PARTNER REQUEST ERROR:', err);
+
+          console.log(
+            'PARTNER REQUEST ERROR:',
+            err
+          );
 
           this.loading = false;
 
           this.errorMessage =
             'Could not submit partner request. Please try again.';
 
+          this.successMessage = '';
+
           setTimeout(() => {
             this.errorMessage = '';
           }, 4000);
+
         }
+
       });
+
   }
-} 
+
+}

@@ -1,23 +1,41 @@
-import { Component, ChangeDetectorRef, OnInit, OnDestroy } from '@angular/core'; 
+import {
+  Component,
+  ChangeDetectorRef,
+  OnInit,
+  OnDestroy
+} from '@angular/core';
+
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpClientModule
+} from '@angular/common/http';
+
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    HttpClientModule
+  ],
   templateUrl: './login.html',
-  styleUrls: ['./login.css']
+  styleUrl: './login.css'
 })
-export class LoginComponent implements OnInit, OnDestroy { 
-  isLoginForm: boolean = true;
-  
-  // URL-ul primit de la backend pentru producție
-  private apiUrl = 'https://sportconnect-be.onrender.com/api/auth';
+export class LoginComponent implements OnInit, OnDestroy {
 
-  // Obiectele mapate pe formularele din HTML
+  isLoginForm = true;
+  loading = false;
+
+  successMessage = '';
+  errorMessage = '';
+
+  private apiUrl =
+    'https://sportconnect-be.onrender.com/api/auth';
+
   loginData = {
     email: '',
     password: ''
@@ -32,100 +50,181 @@ export class LoginComponent implements OnInit, OnDestroy {
   };
 
   constructor(
-    private http: HttpClient, 
+    private http: HttpClient,
     private cdr: ChangeDetectorRef,
-    private router: Router 
+    private router: Router
   ) {}
 
-  // Această funcție rulează automat când se deschide pagina
-  ngOnInit() {
+  ngOnInit(): void {
     this.actualizeazaFundalul();
   }
 
-  toggleForm() {
+  ngOnDestroy(): void {
+    document.body.style.backgroundImage = '';
+  }
+
+  toggleForm(): void {
+    this.clearMessages();
     this.isLoginForm = !this.isLoginForm;
-    this.actualizeazaFundalul(); // Schimbăm fundalul când se rotește mingea
+    this.actualizeazaFundalul();
   }
 
-  // Funcție separată care se ocupă de logica fundalului dinamic
-  private actualizeazaFundalul() {
-    if (this.isLoginForm) {
-      // Când este pe LOGIN (mingea de baschet) -> punem terenul de baschet
-      document.body.style.backgroundImage = "url('/fundal_fotbal.jpg')";
-    } else {
-      // Când este pe REGISTER (mingea de fotbal) -> punem terenul de fotbal
-      document.body.style.backgroundImage = "url('/fundal_bascket.avif')";
+  private actualizeazaFundalul(): void {
+    document.body.style.backgroundImage =
+      this.isLoginForm
+        ? "url('/fundal_fotbal.jpg')"
+        : "url('/fundal_bascket.png')";
+
+    document.body.style.backgroundSize = 'cover';
+    document.body.style.backgroundPosition = 'center';
+    document.body.style.backgroundRepeat = 'no-repeat';
+  }
+
+  onLogin(): void {
+    this.clearMessages();
+
+    if (!this.isValidEmail(this.loginData.email)) {
+      this.showError('Introdu un email valid.');
+      return;
     }
-    // Ne asigurăm că proprietățile de cover sunt păstandențiale
-    document.body.style.backgroundSize = "cover";
-    document.body.style.backgroundPosition = "center";
-    document.body.style.backgroundRepeat = "no-repeat";
-  }
 
-  // Funcția de Login conectată la API-ul de pe Render
- onLogin() {
-    console.log('Se trimit datele de login...', this.loginData);
-    
-    // 1. Salvezi datele pe ascuns ca să le trimiți la API
-    const dateDeTrimis = { ...this.loginData };
-    
-    // 2. GOLEȘTI CASETELE INSTANT (Dispare textul de pe ecran la secundă)
-    this.loginData.email = '';
-    this.loginData.password = '';
-    this.cdr.detectChanges();
-    
-    // 3. Trimitem copia salvată către Render
-    this.http.post(`${this.apiUrl}/login`, dateDeTrimis).subscribe({
+    if (!this.loginData.password.trim()) {
+      this.showError('Introdu parola.');
+      return;
+    }
+
+    this.loading = true;
+
+    const dateDeTrimis = {
+      ...this.loginData
+    };
+
+    this.http.post(
+      `${this.apiUrl}/login`,
+      dateDeTrimis
+    ).subscribe({
       next: (response: any) => {
-        console.log('Login reușit!', response);
+        this.loading = false;
+
         if (response && response.token) {
           localStorage.setItem('token', response.token);
         }
-        alert('Te-ai autentificat cu succes!');
-        this.router.navigate(['/']);
+
+        this.showSuccess('Autentificare reușită!');
+
+        setTimeout(() => {
+          this.router.navigate(['/']);
+        }, 700);
       },
-      error: (err) => {
+
+      error: (err: any) => {
         console.error('Eroare la login:', err);
-        alert('Autentificare eșuată! Verifică datele introduse.');
+        this.loading = false;
+        this.showError('Autentificare eșuată. Verifică datele.');
       }
     });
   }
 
-  // Funcția de Register conectată la API-ul de pe Render
-  onRegister() {
-    console.log('Se trimit datele de înregistrare...', this.registerData);
-    
-    this.http.post(`${this.apiUrl}/register`, this.registerData, { responseType: 'text' }).subscribe({
-      next: (response) => {
-        console.log('Înregistrare reușită!', response);
-        
-        // 1. Golește câmpurile instant de pe ecran
-        this.registerData.firstName = '';
-        this.registerData.lastName = '';
-        this.registerData.email = '';
-        this.registerData.password = '';
-        this.registerData.phoneNumber = '';
-        
-        // 2. Forțăm actualizarea grafică
-        this.cdr.detectChanges();
-        
-        // 3. Afișează alerta
-        alert('Cont creat cu succes! Te poți autentifica acum.');
-        
-        // 4. Mutăm utilizatorul la Login și actualizăm fundalul
-        this.isLoginForm = true; 
-        this.actualizeazaFundalul(); 
-        this.cdr.detectChanges(); 
+  onRegister(): void {
+    this.clearMessages();
+
+    if (!this.registerData.lastName.trim()) {
+      this.showError('Introdu numele.');
+      return;
+    }
+
+    if (!this.registerData.firstName.trim()) {
+      this.showError('Introdu prenumele.');
+      return;
+    }
+
+    if (!this.isValidEmail(this.registerData.email)) {
+      this.showError('Introdu un email valid.');
+      return;
+    }
+
+    if (!this.isValidPhone(this.registerData.phoneNumber)) {
+      this.showError('Numărul de telefon nu este valid.');
+      return;
+    }
+
+    if (this.registerData.password.length < 6) {
+      this.showError('Parola trebuie să aibă minim 6 caractere.');
+      return;
+    }
+
+    this.loading = true;
+
+    this.http.post(
+      `${this.apiUrl}/register`,
+      this.registerData,
+      {
+        responseType: 'text'
+      }
+    ).subscribe({
+      next: () => {
+        this.loading = false;
+
+        this.showSuccess('Cont creat cu succes! Te poți autentifica.');
+
+        this.registerData = {
+          firstName: '',
+          lastName: '',
+          email: '',
+          password: '',
+          phoneNumber: ''
+        };
+
+        setTimeout(() => {
+          this.isLoginForm = true;
+          this.actualizeazaFundalul();
+          this.cdr.detectChanges();
+        }, 900);
       },
-      error: (err) => {
-        console.error('Eroare completă la înregistrare:', err);
-        alert('Eroare la înregistrare! Status: ' + err.status + ' - ' + (err.error || 'Problemă de rețea/CORS'));
+
+      error: (err: any) => {
+        console.error('Eroare la înregistrare:', err);
+        this.loading = false;
+
+        if (err.status === 400) {
+          this.showError('Emailul există deja sau datele sunt invalide.');
+        } else {
+          this.showError('Înregistrarea a eșuat. Încearcă din nou.');
+        }
       }
     });
   }
-  ngOnDestroy(): void {
 
-  document.body.style.backgroundImage = '';
+  private isValidEmail(email: string): boolean {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
 
-}
+  private isValidPhone(phone: string): boolean {
+    return /^[0-9+\s-]{8,15}$/.test(phone);
+  }
+
+  private showSuccess(message: string): void {
+    this.successMessage = message;
+    this.errorMessage = '';
+
+    setTimeout(() => {
+      this.successMessage = '';
+      this.cdr.detectChanges();
+    }, 3500);
+  }
+
+  private showError(message: string): void {
+    this.errorMessage = message;
+    this.successMessage = '';
+
+    setTimeout(() => {
+      this.errorMessage = '';
+      this.cdr.detectChanges();
+    }, 4000);
+  }
+
+  private clearMessages(): void {
+    this.successMessage = '';
+    this.errorMessage = '';
+  }
 }
