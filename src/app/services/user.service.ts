@@ -54,12 +54,15 @@ export class UserService {
 
   changePassword(data: any): Observable<any> {
 
-    return this.http.put(
-      `${this.apiUrl}/me/change-password`,
-      data,
-      this.getHeaders()
-    );
+        return this.http.put(
+            `${this.apiUrl}/me/change-password`,
+            data,
+            {
+            ...this.getHeaders(),
+            responseType: 'text'
+            }
+        );
 
-  }
+    }
 
 }

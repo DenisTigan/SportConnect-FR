@@ -96,7 +96,7 @@ export class SportDetails implements OnInit {
 
     this.visibleDates = [];
 
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 14; i++) {
       const date = new Date(today);
 
       date.setDate(today.getDate() + i);

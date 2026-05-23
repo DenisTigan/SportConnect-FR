@@ -2,140 +2,139 @@
 
 <section class="account-page">
 
-  <div
-    class="loading"
-    *ngIf="loading"
-  >
+  <div class="toast success" *ngIf="successMessage">
+    ✅ {{ successMessage }}
+  </div>
+
+  <div class="toast error" *ngIf="errorMessage">
+    ❌ {{ errorMessage }}
+  </div>
+
+  <div class="loading" *ngIf="loading">
     Loading account...
   </div>
 
-  <div
-    class="account-card"
-    *ngIf="!loading && user"
-  >
+  <div class="account-layout" *ngIf="!loading && user">
 
-    <div class="account-header">
+    <aside class="profile-sidebar">
 
       <div class="avatar">
-        {{ user.firstName?.charAt(0) }}
-        {{ user.lastName?.charAt(0) }}
+        {{ user.firstName?.charAt(0) }}{{ user.lastName?.charAt(0) }}
       </div>
 
-      <div class="account-title">
+      <h2>
+        {{ user.firstName }} {{ user.lastName }}
+      </h2>
+
+      <p>
+        {{ user.email }}
+      </p>
+
+      <span class="role-badge">
+        {{ user.role || 'USER' }}
+      </span>
+
+      <div class="quick-info">
+
+        <div>
+          <span>Phone</span>
+          <strong>{{ user.phoneNumber || 'Not set' }}</strong>
+        </div>
+
+        <div>
+          <span>Status</span>
+          <strong>Active</strong>
+        </div>
+
+      </div>
+
+    </aside>
+
+    <main class="settings-area">
+
+      <div class="page-title">
+
+        <span>
+          ACCOUNT SETTINGS
+        </span>
 
         <h1>
-          My Account
+          Manage your account
         </h1>
 
         <p>
-          Manage your profile information and account security.
+          Update your profile information and keep your account secure.
         </p>
 
       </div>
 
-    </div>
+      <div class="settings-grid">
 
-    <div class="account-grid">
+        <div class="settings-card">
 
-      <div class="form-section">
+          <div class="card-header">
+            <div class="icon green">👤</div>
 
-        <h2>
-          Profile Details
-        </h2>
+            <div>
+              <h3>Profile Information</h3>
+              <p>Edit your personal details.</p>
+            </div>
+          </div>
 
-        <label>
-          First Name
-        </label>
+          <label>First Name</label>
+          <input type="text" [(ngModel)]="profileData.firstName">
 
-        <input
-          type="text"
-          [(ngModel)]="profileData.firstName"
-        >
+          <label>Last Name</label>
+          <input type="text" [(ngModel)]="profileData.lastName">
 
-        <label>
-          Last Name
-        </label>
+          <label>Phone Number</label>
+          <input type="text" [(ngModel)]="profileData.phoneNumber">
 
-        <input
-          type="text"
-          [(ngModel)]="profileData.lastName"
-        >
+          <button
+            class="primary-btn"
+            type="button"
+            [disabled]="savingProfile"
+            (click)="saveProfile()"
+          >
+            {{ savingProfile ? 'Saving...' : 'Save Profile' }}
+          </button>
 
-        <label>
-          Phone Number
-        </label>
+        </div>
 
-        <input
-          type="text"
-          [(ngModel)]="profileData.phoneNumber"
-        >
+        <div class="settings-card">
 
-        <button
-          class="save-btn"
-          (click)="saveProfile()"
-        >
-          Save Profile
-        </button>
+          <div class="card-header">
+            <div class="icon blue">🔒</div>
 
-      </div>
+            <div>
+              <h3>Security</h3>
+              <p>Change your password safely.</p>
+            </div>
+          </div>
 
-      <div class="form-section">
+          <label>Current Password</label>
+          <input type="password" [(ngModel)]="passwordData.currentPassword">
 
-        <h2>
-          Change Password
-        </h2>
+          <label>New Password</label>
+          <input type="password" [(ngModel)]="passwordData.newPassword">
 
-        <label>
-          Current Password
-        </label>
+          <label>Confirm New Password</label>
+          <input type="password" [(ngModel)]="passwordData.confirmNewPassword">
 
-        <input
-          type="password"
-          [(ngModel)]="passwordData.currentPassword"
-        >
+          <button
+            class="primary-btn blue"
+            type="button"
+            [disabled]="savingPassword"
+            (click)="updatePassword()"
+          >
+            {{ savingPassword ? 'Updating...' : 'Change Password' }}
+          </button>
 
-        <label>
-          New Password
-        </label>
-
-        <input
-          type="password"
-          [(ngModel)]="passwordData.newPassword"
-        >
-
-        <label>
-          Confirm New Password
-        </label>
-
-        <input
-          type="password"
-          [(ngModel)]="passwordData.confirmNewPassword"
-        >
-
-        <button
-          class="save-btn password-btn"
-          (click)="updatePassword()"
-        >
-          Change Password
-        </button>
+        </div>
 
       </div>
 
-    </div>
-
-    <div
-      class="success-message"
-      *ngIf="successMessage"
-    >
-      ✅ {{ successMessage }}
-    </div>
-
-    <div
-      class="error-message"
-      *ngIf="errorMessage"
-    >
-      ❌ {{ errorMessage }}
-    </div>
+    </main>
 
   </div>
 
