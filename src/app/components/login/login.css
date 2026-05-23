@@ -1,45 +1,417 @@
-/* Stilul global al componentei */
 :host {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+
   min-height: 100vh;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 30px;
+
 }
 
 .main-container {
-  width: 1050px;
-  height: 650px;
+
+  width: 1100px;
+
+  height: 680px;
+
+  border-radius: 45px;
+
+  overflow: hidden;
+
+  display: flex;
+
+  background:
+    rgba(255,255,255,0.12);
+
+  backdrop-filter: blur(18px);
+
+  border:
+    1px solid rgba(255,255,255,0.18);
+
+  box-shadow:
+    0 35px 90px rgba(0,0,0,0.35);
+
+}
+
+/* FORMS */
+
+.forms-wrapper {
+
+  width: 50%;
+
+  height: 100%;
+
   position: relative;
+
 }
 
-/* POZIȚIONAREA MINGII SPRE INTERIOR */
+.form-panel {
 
-/* Când este în stânga (Register) */
-.left-0-in {
-  left: 35px !important;
+  width: 100%;
+
+  height: 100%;
+
+  padding: 70px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  background:
+    rgba(255,255,255,0.92);
+
 }
 
-/* Când este în dreapta (Login) */
-/* Am folosit \/ pentru a scăpa caracterul slash din numele clasei */
-.left-1\/2-in {
-  left: calc(50% - 35px) !important;
+.hidden {
+
+  display: none;
+
 }
 
-/* Ajustări pentru imaginea mingii */
-/* Am adăugat selectorul de img direct pentru siguranță */
-.ball-outer-panel img, 
-div[class*='left-'] img {
-  filter: drop-shadow(0 20px 30px rgba(0,0,0,0.6));
-  pointer-events: none;
+.form-panel h1 {
+
+  font-size: 32px;
+
+  font-weight: 900;
+
+  color: #004799;
+
+  margin-bottom: 30px;
+
 }
 
-/* Forțăm tranziții line */
-.transition-all {
-  transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+.form-panel h2 {
+
+  font-size: 46px;
+
+  font-weight: 900;
+
+  color: #0f172a;
+
+  margin-bottom: 10px;
+
 }
 
-/* Shadow pentru input-uri la focus */
-input:focus {
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+.form-panel p {
+
+  color: #64748b;
+
+  margin-bottom: 35px;
+
+}
+
+.form-panel input {
+
+  width: 100%;
+
+  height: 58px;
+
+  border: none;
+
+  border-radius: 20px;
+
+  padding: 0 22px;
+
+  margin-bottom: 16px;
+
+  background:
+    linear-gradient(
+      to bottom,
+      #ffffff,
+      #f8fafc
+    );
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  box-shadow:
+    0 14px 30px rgba(15,23,42,0.08);
+
+  transition: 0.25s;
+
+}
+
+.form-panel input:focus {
+
   outline: none;
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 0 0 4px rgba(59,130,246,0.14),
+    0 18px 35px rgba(59,130,246,0.16);
+
+}
+
+.name-row {
+
+  display: flex;
+
+  gap: 12px;
+
+}
+
+.form-panel button {
+
+  width: 100%;
+
+  height: 58px;
+
+  border: none;
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      to right,
+      #3b82f6,
+      #2563eb
+    );
+
+  color: white;
+
+  font-weight: 900;
+
+  margin-top: 10px;
+
+  cursor: pointer;
+
+  transition: 0.25s;
+
+  box-shadow:
+    0 18px 35px rgba(59,130,246,0.3);
+
+}
+
+.form-panel button:hover {
+
+  transform: translateY(-3px);
+
+}
+
+.green {
+
+  background:
+    linear-gradient(
+      to right,
+      #22c55e,
+      #16a34a
+    ) !important;
+
+  box-shadow:
+    0 18px 35px rgba(34,197,94,0.3) !important;
+
+}
+
+/* BALL */
+
+.ball-side {
+
+  width: 50%;
+
+  height: 100%;
+
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+}
+
+.ball-side img {
+
+  width: 82%;
+
+  animation:
+    floatBall 4s ease-in-out infinite;
+
+  filter:
+    drop-shadow(
+      0 35px 45px rgba(0,0,0,0.45)
+    );
+
+}
+
+.overlay-content {
+
+  position: absolute;
+
+  text-align: center;
+
+  color: white;
+
+}
+
+.overlay-content h3 {
+
+  font-size: 30px;
+
+  font-weight: 900;
+
+  margin-bottom: 10px;
+
+}
+
+.overlay-content p {
+
+  margin-bottom: 22px;
+
+}
+
+.switch-btn {
+
+  width: 150px !important;
+
+  background:
+    rgba(0,0,0,0.35) !important;
+
+  border:
+    2px solid white !important;
+
+}
+
+/* TOAST */
+
+.toast {
+
+  position: fixed;
+
+  top: 30px;
+
+  right: 30px;
+
+  z-index: 99999;
+
+  min-width: 320px;
+
+  padding: 18px 22px;
+
+  border-radius: 18px;
+
+  color: white;
+
+  font-weight: 900;
+
+  animation:
+    slideIn 0.35s ease;
+
+}
+
+.success {
+
+  background:
+    linear-gradient(
+      to right,
+      #22c55e,
+      #16a34a
+    );
+
+}
+
+.error {
+
+  background:
+    linear-gradient(
+      to right,
+      #ef4444,
+      #dc2626
+    );
+
+}
+
+@keyframes slideIn {
+
+  from {
+
+    opacity: 0;
+
+    transform:
+      translateX(40px);
+
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform:
+      translateX(0);
+
+  }
+
+}
+
+@keyframes floatBall {
+
+  0% {
+
+    transform:
+      translateY(0);
+
+  }
+
+  50% {
+
+    transform:
+      translateY(-18px);
+
+  }
+
+  100% {
+
+    transform:
+      translateY(0);
+
+  }
+
+}
+
+/* MOBILE */
+
+@media (max-width: 950px) {
+
+  .main-container {
+
+    flex-direction: column;
+
+    width: 100%;
+
+    height: auto;
+
+  }
+
+  .forms-wrapper {
+
+    width: 100%;
+
+  }
+
+  .ball-side {
+
+    display: none;
+
+  }
+
+  .form-panel {
+
+    padding: 40px 25px;
+
+  }
+
+  .form-panel h2 {
+
+    font-size: 38px;
+
+  }
+
 }

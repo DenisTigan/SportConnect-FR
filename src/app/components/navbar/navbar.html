@@ -29,7 +29,10 @@
         Become a Partner
       </a>
 
-      <a routerLink="/account">
+      <a
+        *ngIf="isLoggedIn"
+        routerLink="/account"
+      >
         My Account
       </a>
 
@@ -38,7 +41,16 @@
     <div class="actions">
 
       <button
+        *ngIf="!isLoggedIn"
         class="login-btn"
+        routerLink="/login"
+      >
+        Login
+      </button>
+
+      <button
+        *ngIf="isLoggedIn"
+        class="login-btn logout"
         (click)="logout()"
       >
         Logout

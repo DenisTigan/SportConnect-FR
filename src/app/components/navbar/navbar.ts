@@ -1,6 +1,11 @@
 import { Component } from '@angular/core';
+
 import { CommonModule } from '@angular/common';
-import { RouterLink, Router } from '@angular/router';
+
+import {
+  Router,
+  RouterLink
+} from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -25,10 +30,15 @@ export class Navbar {
     private router: Router
   ) {}
 
+  get isLoggedIn(): boolean {
+
+    return !!localStorage.getItem('token');
+
+  }
+
   toggleMenu(): void {
 
-    this.menuOpen =
-      !this.menuOpen;
+    this.menuOpen = !this.menuOpen;
 
   }
 
@@ -36,9 +46,7 @@ export class Navbar {
 
     localStorage.removeItem('token');
 
-    this.router.navigate([
-      '/login'
-    ]);
+    this.router.navigate(['/login']);
 
   }
 

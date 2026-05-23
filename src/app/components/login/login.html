@@ -1,114 +1,168 @@
-<div class="main-container rounded-[50px] shadow-2xl overflow-hidden flex relative bg-[#f0f2f5]" [ngClass]="{'active': !isLoginForm}">
-  
-  <div class="absolute inset-0 w-full h-full flex z-10">
-    
-    <div class="w-1/2 h-full p-12 flex flex-col items-center justify-center transition-all duration-500"
-         [ngClass]="{'opacity-100 pointer-events-auto': isLoginForm, 'opacity-0 pointer-events-none': !isLoginForm}">
-      <h1 class="text-3xl font-black italic text-[#004799] mb-8 uppercase tracking-tighter text-center">ORADEA SPORT CONNECT</h1>
-      <h2 class="text-4xl font-bold mb-2 text-gray-800">Welcome Back</h2>
-      <p class="text-gray-500 mb-8 text-center text-sm px-10">Conectează-te pentru a-ți rezerva terenul preferat.</p>
-      
-      <div class="w-full space-y-4 max-w-sm">
-        <input type="email" 
-               name="loginEmail"
-               [(ngModel)]="loginData.email"
-               placeholder="Email" 
-               required
-               class="w-full p-4 bg-white rounded-xl outline-none shadow-sm text-gray-800 border border-transparent focus:border-blue-500 transition-all">
-        
-        <input type="password" 
-               name="loginPassword"
-               [(ngModel)]="loginData.password"
-               placeholder="Parolă" 
-               required
-               class="w-full p-4 bg-white rounded-xl outline-none shadow-sm text-gray-800 border border-transparent focus:border-blue-500 transition-all">
-        
-        <button type="button" 
-                (click)="onLogin()"
-                class="w-full bg-[#3e85e1] text-white py-4 rounded-xl font-bold shadow-lg hover:bg-blue-600 transition-all uppercase tracking-wider">
-          Autentificare
-        </button>
-      </div>
+<div
+  class="toast success"
+  *ngIf="successMessage"
+>
+  ✅ {{ successMessage }}
+</div>
+
+<div
+  class="toast error"
+  *ngIf="errorMessage"
+>
+  ❌ {{ errorMessage }}
+</div>
+
+<div class="main-container">
+
+  <div class="forms-wrapper">
+
+    <!-- LOGIN -->
+    <div
+      class="form-panel login-panel"
+      [class.hidden]="!isLoginForm"
+    >
+
+      <h1>
+        ORADEA SPORT CONNECT
+      </h1>
+
+      <h2>
+        Welcome Back
+      </h2>
+
+      <p>
+        Conectează-te pentru a rezerva terenul preferat.
+      </p>
+
+      <input
+        type="email"
+        [(ngModel)]="loginData.email"
+        placeholder="Email"
+      >
+
+      <input
+        type="password"
+        [(ngModel)]="loginData.password"
+        placeholder="Parolă"
+      >
+
+      <button
+        (click)="onLogin()"
+      >
+        {{
+          loading
+            ? 'Loading...'
+            : 'Autentificare'
+        }}
+      </button>
+
     </div>
 
-    <div class="w-1/2 h-full p-12 flex flex-col items-center justify-center transition-all duration-500"
-         [ngClass]="{'opacity-100 pointer-events-auto': !isLoginForm, 'opacity-0 pointer-events-none': isLoginForm}">
-      <h1 class="text-3xl font-black italic text-[#004799] mb-6 uppercase tracking-tighter text-center">ORADEA SPORT CONNECT</h1>
-      <h2 class="text-4xl font-bold mb-2 text-gray-800">Registration</h2>
-      <p class="text-gray-500 mb-6 text-center text-sm px-10">Alătură-te comunității noastre sportive.</p>
-      
-      <div class="w-full space-y-3 max-w-sm text-gray-800">
-        <div class="flex space-x-2">
-          <input type="text" 
-                 name="lastName"
-                 [(ngModel)]="registerData.lastName"
-                 placeholder="Nume" 
-                 required
-                 class="w-1/2 p-3 bg-white rounded-xl outline-none shadow-sm border border-transparent focus:border-green-500 transition-all">
-          
-          <input type="text" 
-                 name="firstName"
-                 [(ngModel)]="registerData.firstName"
-                 placeholder="Prenume" 
-                 required
-                 class="w-1/2 p-3 bg-white rounded-xl outline-none shadow-sm border border-transparent focus:border-green-500 transition-all">
-        </div>
+    <!-- REGISTER -->
+    <div
+      class="form-panel register-panel"
+      [class.hidden]="isLoginForm"
+    >
 
-        <input type="email" 
-               name="registerEmail"
-               [(ngModel)]="registerData.email"
-               placeholder="Email" 
-               required
-               class="w-full p-3 bg-white rounded-xl outline-none shadow-sm border border-transparent focus:border-green-500 transition-all">
-        
-        <input type="tel" 
-               name="phoneNumber"
-               [(ngModel)]="registerData.phoneNumber"
-               placeholder="Număr de telefon" 
-               required
-               class="w-full p-3 bg-white rounded-xl outline-none shadow-sm border border-transparent focus:border-green-500 transition-all">
+      <h1>
+        ORADEA SPORT CONNECT
+      </h1>
 
-        <input type="password" 
-               name="registerPassword"
-               [(ngModel)]="registerData.password"
-               placeholder="Parolă" 
-               required
-               class="w-full p-3 bg-white rounded-xl outline-none shadow-sm border border-transparent focus:border-green-500 transition-all">
-        
-        <button type="button" 
-                (click)="onRegister()"
-                class="w-full bg-[#1a8a3d] text-white py-4 rounded-xl font-bold shadow-lg hover:bg-green-600 transition-all uppercase tracking-wider">
-          Înregistrare
-        </button>
+      <h2>
+        Registration
+      </h2>
+
+      <p>
+        Creează-ți contul.
+      </p>
+
+      <div class="name-row">
+
+        <input
+          type="text"
+          [(ngModel)]="registerData.lastName"
+          placeholder="Nume"
+        >
+
+        <input
+          type="text"
+          [(ngModel)]="registerData.firstName"
+          placeholder="Prenume"
+        >
+
       </div>
+
+      <input
+        type="email"
+        [(ngModel)]="registerData.email"
+        placeholder="Email"
+      >
+
+      <input
+        type="tel"
+        [(ngModel)]="registerData.phoneNumber"
+        placeholder="Telefon"
+      >
+
+      <input
+        type="password"
+        [(ngModel)]="registerData.password"
+        placeholder="Parolă"
+      >
+
+      <button
+        class="green"
+        (click)="onRegister()"
+      >
+        {{
+          loading
+            ? 'Loading...'
+            : 'Înregistrare'
+        }}
+      </button>
+
     </div>
+
   </div>
 
-  <div class="absolute top-0 w-1/2 h-full transition-all duration-700 ease-in-out z-20 flex items-center justify-center"
-       [ngClass]="isLoginForm ? 'left-1/2-in' : 'left-0-in'">
-    
-    <div class="relative w-full h-full flex items-center justify-center transition-all duration-700"
-         [style.transform]="isLoginForm ? 'rotate(0deg)' : 'rotate(-360deg)'">
-      
-      <img [src]="isLoginForm ? '/soccer_ball.png' : '/basketball_ball.png'" 
-           alt="ball" 
-           class="w-[90%] h-[90%] object-contain drop-shadow-[0_35px_35px_rgba(0,0,0,0.5)] transition-all duration-300">
+  <!-- BALL -->
+  <div class="ball-side">
 
-<div class="absolute text-white text-center w-48 z-30 flex flex-col items-center"
-     [ngClass]="isLoginForm ? 'mb-1 mr-5' : 'mb-7 ml-0  '">
+    <img
+      [src]="
+        isLoginForm
+          ? '/soccer_ball.png'
+          : '/basketball_ball.png'
+      "
+    >
 
-        <h3 class="font-black text-lg uppercase italic mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-          HELLO, WELCOME!
-        </h3>
-        <p class="text-[11px] font-bold mb-4 drop-shadow-[0_2px_3px_rgba(0,0,0,0.9)]">
-          {{ isLoginForm ? "Nu ai cont încă?" : "Ai deja un cont?" }}
-        </p>
-        <button (click)="toggleForm()" 
-                class="w-32 py-2 border-2 border-white rounded-lg text-xs font-black uppercase bg-black/40 hover:bg-white hover:text-black transition-all shadow-xl backdrop-blur-[2px]">
-          {{ isLoginForm ? 'Register' : 'Login' }}
-        </button>
-      </div>
+    <div class="overlay-content">
+
+      <h3>
+        HELLO, WELCOME!
+      </h3>
+
+      <p>
+        {{
+          isLoginForm
+            ? 'Nu ai cont încă?'
+            : 'Ai deja cont?'
+        }}
+      </p>
+
+      <button
+        class="switch-btn"
+        (click)="toggleForm()"
+      >
+        {{
+          isLoginForm
+            ? 'Register'
+            : 'Login'
+        }}
+      </button>
+
     </div>
+
   </div>
 
 </div>
