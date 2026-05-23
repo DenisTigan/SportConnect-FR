@@ -10,7 +10,6 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-
 export class ReservationService {
 
   private apiUrl =
@@ -21,7 +20,6 @@ export class ReservationService {
   ) {}
 
   private getHeaders() {
-
     const token =
       localStorage.getItem('token');
 
@@ -30,29 +28,30 @@ export class ReservationService {
         Authorization: `Bearer ${token}`
       })
     };
-
   }
 
   createReservation(data: any): Observable<any> {
-
     return this.http.post(
       `${this.apiUrl}/create`,
       data,
       this.getHeaders()
     );
-
   }
 
   getOccupiedReservations(
     fieldId: number,
     date: string
   ): Observable<any> {
-
     return this.http.get(
       `${this.apiUrl}/occupied?fieldId=${fieldId}&date=${date}`,
       this.getHeaders()
     );
-
   }
 
+  getMyHistory(): Observable<any> {
+    return this.http.get(
+      `${this.apiUrl}/my-history`,
+      this.getHeaders()
+    );
+  }
 }

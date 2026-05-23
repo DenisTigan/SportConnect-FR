@@ -1,0 +1,104 @@
+<app-navbar></app-navbar>
+
+<section class="reservations-page">
+
+  <div class="page-header">
+    <span>MY BOOKINGS</span>
+
+    <h1>
+      My Reservations
+    </h1>
+
+    <p>
+      View your booking history and upcoming reservations.
+    </p>
+  </div>
+
+  <div
+    class="loading"
+    *ngIf="loading"
+  >
+    Loading reservations...
+  </div>
+
+  <div
+    class="empty"
+    *ngIf="!loading && reservations.length === 0"
+  >
+    <h2>No reservations yet</h2>
+    <p>Your booked venues will appear here.</p>
+  </div>
+
+  <div
+    class="reservations-grid"
+    *ngIf="!loading && reservations.length > 0"
+  >
+
+    <div
+      class="reservation-card"
+      *ngFor="let reservation of reservations"
+    >
+
+      <div class="card-top">
+
+        <div>
+          <span class="label">
+            Venue
+          </span>
+
+          <h2>
+            {{ reservation.fieldName }}
+          </h2>
+        </div>
+
+        <span
+          class="status"
+          [class.cancelled]="reservation.status === 'CANCELLED'"
+          [class.active]="reservation.status !== 'CANCELLED'"
+        >
+          {{ reservation.status }}
+        </span>
+
+      </div>
+
+      <div class="reservation-info">
+
+        <div>
+          <span>Date</span>
+          <strong>
+            {{ formatDate(reservation.startTime) }}
+          </strong>
+        </div>
+
+        <div>
+          <span>Time</span>
+          <strong>
+            {{ formatTime(reservation.startTime) }}
+            -
+            {{ formatTime(reservation.endTime) }}
+          </strong>
+        </div>
+
+        <div>
+          <span>Total Price</span>
+          <strong>
+            {{ reservation.totalPrice }} RON
+          </strong>
+        </div>
+
+        <div>
+          <span>Client</span>
+          <strong>
+            {{ reservation.clientName }}
+          </strong>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<app-footer></app-footer>

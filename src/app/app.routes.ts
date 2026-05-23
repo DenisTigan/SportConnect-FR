@@ -18,6 +18,8 @@ from './pages/partner/partner';
 import { MyAccount }
 from './pages/my-account/my-account';
 
+import { MyReservations } from './pages/my-reservations/my-reservations';
+
 export const routes: Routes = [
 
   {
@@ -53,6 +55,11 @@ export const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+
+  {
+    path: 'my-reservations',
+    component: MyReservations
   }
 
 ];
