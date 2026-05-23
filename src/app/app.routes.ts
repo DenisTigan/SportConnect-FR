@@ -36,6 +36,11 @@ export const routes: Routes = [
   },
 
   {
+    path: 'sport/search',
+    component: SportVenues
+  },
+
+  {
     path: 'sport/:category',
     component: SportVenues
   },

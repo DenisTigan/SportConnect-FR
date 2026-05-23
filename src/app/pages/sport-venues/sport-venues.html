@@ -3,7 +3,7 @@
 <div class="venues-page">
 
   <h1 class="title">
-    {{ category }} Venues
+    {{ searchTerm ? 'Search results for "' + searchTerm + '"' : category + ' Venues' }}
   </h1>
 
   <div *ngIf="loading">

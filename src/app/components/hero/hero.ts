@@ -42,22 +42,20 @@ export class Hero {
   searchField(): void {
     this.errorMessage = '';
 
-    const term = this.searchTerm.trim().toLowerCase();
+    const term = this.searchTerm.trim();
 
     if (!term) {
       this.errorMessage = 'Scrie numele unui teren.';
       return;
     }
 
-    const field = this.allFields.find((f: any) =>
-      f.name.toLowerCase().includes(term)
+    this.router.navigate(
+      ['/sport/search'],
+      {
+        queryParams: {
+          q: term
+        }
+      }
     );
-
-    if (!field) {
-      this.errorMessage = 'Nu am găsit acest teren.';
-      return;
-    }
-
-    this.router.navigate(['/venue', field.id]);
   }
 }
