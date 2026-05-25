@@ -43,10 +43,9 @@ export class FieldService {
   }
 
   getAllFields() {
-
     return this.http.get(
-      `${this.apiUrl}/all`
+      `${this.apiUrl}/all`,
+      this.getHeaders()
     );
-
   }
 }
