@@ -40,7 +40,10 @@
         My Reservations
       </a>
 
-      <a routerLink="/admin" *ngIf="isAdmin">
+      <a
+        routerLink="/admin"
+        *ngIf="isAdmin || isPartner"
+      >
         Admin Dashboard
       </a>
 

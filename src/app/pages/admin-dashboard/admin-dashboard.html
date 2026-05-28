@@ -14,7 +14,7 @@
     Loading admin dashboard...
   </div>
 
-  <div class="admin-layout" *ngIf="!loading && isAdmin">
+  <div class="admin-layout" *ngIf="!loading && (isAdmin || isPartner)">
 
     <div class="admin-header">
       <span>ADMIN PANEL</span>
@@ -221,7 +221,7 @@
     </div>
 
     <!-- ZONA CERERI PARTENERI -->
-    <div class="partner-requests-card">
+    <div class="partner-requests-card" *ngIf="isAdmin">
 
       <div class="card-title">
         <h2>Partner Requests</h2>

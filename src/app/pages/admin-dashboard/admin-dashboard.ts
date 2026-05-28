@@ -32,7 +32,10 @@ export class AdminDashboard implements OnInit {
 
   loading = true;
   saving = false;
+
   isAdmin = false;
+  isPartner = false;
+  currentUser: any = null;
 
   fields: any[] = [];
   partnerRequests: any[] = [];
@@ -69,10 +72,10 @@ export class AdminDashboard implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.checkAdmin();
+    this.checkAccess();
   }
 
-  checkAdmin(): void {
+  checkAccess(): void {
     this.userService.getMe().subscribe({
       next: (user: any) => {
         const role =
@@ -81,19 +84,30 @@ export class AdminDashboard implements OnInit {
           user.userRole ||
           '';
 
-        if (
-          role !== 'ADMIN' &&
-          role !== 'ROLE_ADMIN' &&
-          role !== 'admin'
-        ) {
+        this.currentUser = user;
+
+        this.isAdmin =
+          role === 'ADMIN' ||
+          role === 'ROLE_ADMIN' ||
+          role === 'admin';
+
+        this.isPartner =
+          role === 'PARTNER' ||
+          role === 'ROLE_PARTNER' ||
+          role === 'partner';
+
+        if (!this.isAdmin && !this.isPartner) {
           this.router.navigate(['/']);
           return;
         }
 
         this.zone.run(() => {
-          this.isAdmin = true;
           this.loadFields();
-          this.loadPartnerRequests();
+
+          if (this.isAdmin) {
+            this.loadPartnerRequests();
+          }
+
           this.cdr.detectChanges();
         });
       },
@@ -112,7 +126,16 @@ export class AdminDashboard implements OnInit {
     this.fieldService.getAllFields().subscribe({
       next: (data: any[]) => {
         this.zone.run(() => {
-          this.fields = Array.isArray(data) ? data : [];
+          let allFields =
+            Array.isArray(data) ? data : [];
+
+          if (this.isPartner && !this.isAdmin) {
+            allFields = allFields.filter((field: any) =>
+              Number(field.ownerId) === Number(this.currentUser?.id)
+            );
+          }
+
+          this.fields = allFields;
           this.loading = false;
           this.cdr.detectChanges();
         });
@@ -131,10 +154,16 @@ export class AdminDashboard implements OnInit {
   }
 
   loadPartnerRequests(): void {
+    if (!this.isAdmin) {
+      return;
+    }
+
     this.partnerService.getPendingRequests().subscribe({
       next: (data: any[]) => {
         this.zone.run(() => {
-          this.partnerRequests = Array.isArray(data) ? data : [];
+          this.partnerRequests =
+            Array.isArray(data) ? data : [];
+
           this.cdr.detectChanges();
         });
       },
@@ -146,6 +175,10 @@ export class AdminDashboard implements OnInit {
   }
 
   approvePartnerRequest(request: any): void {
+    if (!this.isAdmin) {
+      return;
+    }
+
     this.partnerService.approveRequest(request.id).subscribe({
       next: () => {
         this.zone.run(() => {
@@ -163,6 +196,10 @@ export class AdminDashboard implements OnInit {
   }
 
   rejectPartnerRequest(request: any): void {
+    if (!this.isAdmin) {
+      return;
+    }
+
     this.partnerService.rejectRequest(request.id).subscribe({
       next: () => {
         this.zone.run(() => {
@@ -257,6 +294,13 @@ export class AdminDashboard implements OnInit {
   }
 
   editField(field: any): void {
+    if (this.isPartner && !this.isAdmin) {
+      if (Number(field.ownerId) !== Number(this.currentUser?.id)) {
+        this.showError('You can edit only your own fields.');
+        return;
+      }
+    }
+
     this.editingFieldId = field.id;
 
     this.fieldForm = {
@@ -281,6 +325,13 @@ export class AdminDashboard implements OnInit {
   }
 
   openDeleteModal(field: any): void {
+    if (this.isPartner && !this.isAdmin) {
+      if (Number(field.ownerId) !== Number(this.currentUser?.id)) {
+        this.showError('You can delete only your own fields.');
+        return;
+      }
+    }
+
     this.fieldToDelete = field;
     this.showDeleteModal = true;
   }
