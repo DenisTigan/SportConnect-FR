@@ -1,4 +1,8 @@
-import { Component } from '@angular/core';
+import {
+  Component,
+  ChangeDetectorRef,
+  NgZone
+} from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 
@@ -45,7 +49,9 @@ export class Partner {
   };
 
   constructor(
-    private partnerService: PartnerService
+    private partnerService: PartnerService,
+    private cdr: ChangeDetectorRef,
+    private zone: NgZone
   ) {}
 
   submitPartnerRequest(): void {
@@ -54,32 +60,27 @@ export class Partner {
     this.errorMessage = '';
 
     if (!this.partnerData.businessName.trim()) {
-      this.errorMessage =
-        'Business name is required.';
+      this.showError('Business name is required.');
       return;
     }
 
     if (!this.partnerData.phoneNumber.trim()) {
-      this.errorMessage =
-        'Phone number is required.';
+      this.showError('Phone number is required.');
       return;
     }
 
     if (!this.partnerData.city.trim()) {
-      this.errorMessage =
-        'City is required.';
+      this.showError('City is required.');
       return;
     }
 
     if (!this.partnerData.address.trim()) {
-      this.errorMessage =
-        'Address is required.';
+      this.showError('Address is required.');
       return;
     }
 
     if (!this.partnerData.sportCategory.trim()) {
-      this.errorMessage =
-        'Sport category is required.';
+      this.showError('Sport category is required.');
       return;
     }
 
@@ -96,25 +97,32 @@ export class Partner {
             res
           );
 
-          this.loading = false;
+          this.zone.run(() => {
 
-          this.successMessage =
-            'Partner request submitted successfully!';
+            this.loading = false;
 
-          this.errorMessage = '';
+            this.successMessage =
+              'Cererea ta a fost trimisă cu succes!';
 
-          this.partnerData = {
-            businessName: '',
-            phoneNumber: '',
-            city: '',
-            address: '',
-            sportCategory: '',
-            message: ''
-          };
+            this.errorMessage = '';
 
-          setTimeout(() => {
-            this.successMessage = '';
-          }, 4000);
+            this.partnerData = {
+              businessName: '',
+              phoneNumber: '',
+              city: '',
+              address: '',
+              sportCategory: '',
+              message: ''
+            };
+
+            this.cdr.detectChanges();
+
+            setTimeout(() => {
+              this.successMessage = '';
+              this.cdr.detectChanges();
+            }, 4000);
+
+          });
 
         },
 
@@ -125,20 +133,66 @@ export class Partner {
             err
           );
 
-          this.loading = false;
+          this.zone.run(() => {
 
-          this.errorMessage =
-            'Could not submit partner request. Please try again.';
+            this.loading = false;
 
-          this.successMessage = '';
+            if (
+              err.status === 200 ||
+              err.status === 201
+            ) {
 
-          setTimeout(() => {
-            this.errorMessage = '';
-          }, 4000);
+              this.successMessage =
+                'Cererea ta a fost trimisă cu succes!';
+
+              this.errorMessage = '';
+
+              this.partnerData = {
+                businessName: '',
+                phoneNumber: '',
+                city: '',
+                address: '',
+                sportCategory: '',
+                message: ''
+              };
+
+            } else {
+
+              this.errorMessage =
+                'Cererea nu a putut fi trimisă. Încearcă din nou.';
+
+              this.successMessage = '';
+
+            }
+
+            this.cdr.detectChanges();
+
+            setTimeout(() => {
+              this.errorMessage = '';
+              this.successMessage = '';
+              this.cdr.detectChanges();
+            }, 4000);
+
+          });
 
         }
 
       });
+
+  }
+
+  showError(message: string): void {
+
+    this.errorMessage = message;
+
+    this.successMessage = '';
+
+    this.cdr.detectChanges();
+
+    setTimeout(() => {
+      this.errorMessage = '';
+      this.cdr.detectChanges();
+    }, 4000);
 
   }
 
