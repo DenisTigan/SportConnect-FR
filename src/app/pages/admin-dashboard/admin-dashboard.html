@@ -1,0 +1,353 @@
+<app-navbar></app-navbar>
+
+<section class="admin-page">
+
+  <div
+    class="toast success"
+    *ngIf="successMessage"
+  >
+    ✅ {{ successMessage }}
+  </div>
+
+  <div
+    class="toast error"
+    *ngIf="errorMessage"
+  >
+    ❌ {{ errorMessage }}
+  </div>
+
+  <div
+    class="loading"
+    *ngIf="loading"
+  >
+    Loading admin dashboard...
+  </div>
+
+  <div
+    class="admin-layout"
+    *ngIf="!loading && isAdmin"
+  >
+
+    <div class="admin-header">
+
+      <span>
+        ADMIN PANEL
+      </span>
+
+      <h1>
+        Manage Sports Fields
+      </h1>
+
+      <p>
+        Add, edit and remove venues from the SportConnect platform.
+      </p>
+
+    </div>
+
+    <div class="dashboard-grid">
+
+      <div class="form-card">
+
+        <div class="card-title">
+
+          <h2>
+            {{ editingFieldId ? 'Update Field' : 'Add New Field' }}
+          </h2>
+
+          <p>
+            Complete the field details and upload an image.
+          </p>
+
+        </div>
+
+        <label>
+          Field Name
+        </label>
+
+        <input
+          type="text"
+          [(ngModel)]="fieldForm.name"
+          placeholder="Ex: Teren Sintetic Oncea"
+        >
+
+        <label>
+          Address
+        </label>
+
+        <input
+          type="text"
+          [(ngModel)]="fieldForm.address"
+          placeholder="Ex: Strada Sportului nr. 1"
+        >
+
+        <label>
+          Category
+        </label>
+
+        <select
+          [(ngModel)]="fieldForm.category"
+        >
+          <option value="">
+            Select category
+          </option>
+
+          <option value="Fotbal">
+            Fotbal
+          </option>
+
+          <option value="Tenis">
+            Tenis
+          </option>
+
+          <option value="Baschet">
+            Baschet
+          </option>
+
+          <option value="Volei">
+            Volei
+          </option>
+
+          <option value="Padel">
+            Padel
+          </option>
+        </select>
+
+        <label>
+          Price / Hour
+        </label>
+
+        <input
+          type="number"
+          [(ngModel)]="fieldForm.pricePerHour"
+        >
+
+        <label>
+          Phone Number
+        </label>
+
+        <input
+          type="text"
+          [(ngModel)]="fieldForm.phoneNumber"
+        >
+
+        <label>
+          Description
+        </label>
+
+        <textarea
+          rows="4"
+          [(ngModel)]="fieldForm.description"
+        ></textarea>
+
+        <div class="time-row">
+
+          <div>
+            <label>
+              Open Time
+            </label>
+
+            <input
+              type="time"
+              [(ngModel)]="fieldForm.openTime"
+            >
+          </div>
+
+          <div>
+            <label>
+              Close Time
+            </label>
+
+            <input
+              type="time"
+              [(ngModel)]="fieldForm.closeTime"
+            >
+          </div>
+
+        </div>
+
+        <div class="checks">
+
+          <label>
+            <input
+              type="checkbox"
+              [(ngModel)]="fieldForm.hasLighting"
+            >
+            Has Lighting
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              [(ngModel)]="fieldForm.isIndoor"
+            >
+            Indoor
+          </label>
+
+        </div>
+
+        <label>
+          Field Image
+        </label>
+
+        <input
+          type="file"
+          accept="image/*"
+          (change)="onImageSelected($event)"
+        >
+
+        <div class="actions-row">
+
+          <button
+            class="save-btn"
+            type="button"
+            [disabled]="saving"
+            (click)="saveField()"
+          >
+            {{ saving ? 'Saving...' : editingFieldId ? 'Update Field' : 'Add Field' }}
+          </button>
+
+          <button
+            class="cancel-btn"
+            type="button"
+            *ngIf="editingFieldId"
+            (click)="resetForm()"
+          >
+            Cancel
+          </button>
+
+        </div>
+
+      </div>
+
+      <div class="list-card">
+
+        <div class="card-title">
+
+          <h2>
+            Existing Fields
+          </h2>
+
+          <p>
+            {{ fields.length }} venues available.
+          </p>
+
+        </div>
+
+        <div
+          class="field-list"
+          *ngIf="fields.length > 0"
+        >
+
+          <div
+            class="field-item"
+            *ngFor="let field of fields"
+          >
+
+            <img
+              [src]="field.imageURL"
+              alt=""
+            >
+
+            <div class="field-info">
+
+              <h3>
+                {{ field.name }}
+              </h3>
+
+              <p>
+                {{ field.category }} · {{ field.pricePerHour }} RON/h
+              </p>
+
+              <span>
+                {{ field.address }}
+              </span>
+
+            </div>
+
+            <div class="item-actions">
+
+              <button
+                class="edit"
+                type="button"
+                (click)="editField(field)"
+              >
+                Edit
+              </button>
+
+              <button
+                class="delete"
+                type="button"
+                (click)="openDeleteModal(field)"
+              >
+                Delete
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div
+          class="empty"
+          *ngIf="fields.length === 0"
+        >
+          No fields found.
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<div
+  class="delete-modal"
+  *ngIf="showDeleteModal"
+>
+
+  <div class="delete-box">
+
+    <div class="delete-icon">
+      ⚠️
+    </div>
+
+    <h2>
+      Delete Field
+    </h2>
+
+    <p>
+      Are you sure you want to delete
+      <strong>
+        {{ fieldToDelete?.name }}
+      </strong>
+      ?
+    </p>
+
+    <div class="delete-actions">
+
+      <button
+        class="cancel-delete"
+        type="button"
+        (click)="closeDeleteModal()"
+      >
+        Cancel
+      </button>
+
+      <button
+        class="confirm-delete"
+        type="button"
+        (click)="confirmDelete()"
+      >
+        Delete
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<app-footer></app-footer>
