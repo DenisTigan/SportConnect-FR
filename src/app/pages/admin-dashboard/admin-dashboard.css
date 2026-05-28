@@ -54,12 +54,17 @@
 }
 
 .form-card,
-.list-card {
+.list-card,
+.partner-requests-card {
   background: white;
   border-radius: 34px;
   padding: 32px;
   border: 1px solid #e2e8f0;
   box-shadow: 0 22px 60px rgba(15,23,42,0.08);
+}
+
+.partner-requests-card {
+  margin-top: 34px;
 }
 
 .card-title {
@@ -250,6 +255,100 @@
   color: #64748b;
   background: #f8fafc;
   border-radius: 24px;
+  border: 1px solid #e2e8f0;
+}
+
+.partner-request-list {
+  display: grid;
+  gap: 18px;
+}
+
+.partner-request-item {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr auto;
+  gap: 22px;
+  align-items: center;
+  padding: 22px;
+  border-radius: 26px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  transition: 0.25s;
+}
+
+.partner-request-item:hover {
+  background: white;
+  transform: translateY(-3px);
+  box-shadow: 0 16px 35px rgba(15,23,42,0.08);
+}
+
+.request-main {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.request-icon {
+  width: 58px;
+  height: 58px;
+  border-radius: 18px;
+  background: rgba(34,197,94,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+}
+
+.request-main h3 {
+  font-size: 21px;
+  font-weight: 950;
+  color: #0f172a;
+  margin-bottom: 5px;
+}
+
+.request-main p {
+  color: #16a34a;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.request-main span {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.request-message {
+  color: #475569;
+  line-height: 1.6;
+  font-weight: 600;
+}
+
+.request-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.request-actions button {
+  padding: 13px 18px;
+  border: none;
+  border-radius: 15px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.approve-btn {
+  background: rgba(34,197,94,0.14);
+  color: #16a34a;
+}
+
+.reject-btn {
+  background: rgba(239,68,68,0.14);
+  color: #dc2626;
+}
+
+.approve-btn:hover,
+.reject-btn:hover {
+  transform: translateY(-2px);
 }
 
 .toast {
@@ -388,6 +487,18 @@
 @media (max-width: 1100px) {
   .dashboard-grid {
     grid-template-columns: 1fr;
+  }
+
+  .partner-request-item {
+    grid-template-columns: 1fr;
+  }
+
+  .request-actions {
+    width: 100%;
+  }
+
+  .request-actions button {
+    flex: 1;
   }
 }
 

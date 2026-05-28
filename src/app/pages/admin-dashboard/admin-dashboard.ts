@@ -14,6 +14,7 @@ import { Footer } from '../../components/footer/footer';
 
 import { FieldService } from '../../services/field.service';
 import { UserService } from '../../services/user.service';
+import { PartnerService } from '../../services/partner.service';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -34,6 +35,7 @@ export class AdminDashboard implements OnInit {
   isAdmin = false;
 
   fields: any[] = [];
+  partnerRequests: any[] = [];
 
   editingFieldId: number | null = null;
   selectedImage: File | null = null;
@@ -60,6 +62,7 @@ export class AdminDashboard implements OnInit {
   constructor(
     private fieldService: FieldService,
     private userService: UserService,
+    private partnerService: PartnerService,
     private router: Router,
     private cdr: ChangeDetectorRef,
     private zone: NgZone
@@ -90,67 +93,90 @@ export class AdminDashboard implements OnInit {
         this.zone.run(() => {
           this.isAdmin = true;
           this.loadFields();
+          this.loadPartnerRequests();
           this.cdr.detectChanges();
         });
       },
 
-      error: (err: any) => {
-        console.log('ADMIN CHECK ERROR:', err);
+      error: () => {
         this.router.navigate(['/login']);
       }
     });
   }
 
-  loadFields(
-    showPageLoading: boolean = true
-  ): void {
-
+  loadFields(showPageLoading: boolean = true): void {
     if (showPageLoading) {
       this.loading = true;
     }
 
-    this.fieldService
-      .getAllFields()
-      .subscribe({
+    this.fieldService.getAllFields().subscribe({
+      next: (data: any[]) => {
+        this.zone.run(() => {
+          this.fields = Array.isArray(data) ? data : [];
+          this.loading = false;
+          this.cdr.detectChanges();
+        });
+      },
 
-        next: (data: any[]) => {
+      error: (err: any) => {
+        console.log('FIELDS ERROR:', err);
 
-          this.zone.run(() => {
+        this.zone.run(() => {
+          this.loading = false;
+          this.showError('Could not load fields.');
+          this.cdr.detectChanges();
+        });
+      }
+    });
+  }
 
-            this.fields =
-              Array.isArray(data) ? data : [];
+  loadPartnerRequests(): void {
+    this.partnerService.getPendingRequests().subscribe({
+      next: (data: any[]) => {
+        this.zone.run(() => {
+          this.partnerRequests = Array.isArray(data) ? data : [];
+          this.cdr.detectChanges();
+        });
+      },
 
-            this.loading = false;
+      error: (err: any) => {
+        console.log('PARTNER REQUESTS ERROR:', err);
+      }
+    });
+  }
 
-            this.cdr.detectChanges();
+  approvePartnerRequest(request: any): void {
+    this.partnerService.approveRequest(request.id).subscribe({
+      next: () => {
+        this.zone.run(() => {
+          this.showSuccess('Partner request approved!');
+          this.loadPartnerRequests();
+          this.cdr.detectChanges();
+        });
+      },
 
-          });
+      error: (err: any) => {
+        console.log('APPROVE ERROR:', err);
+        this.showError('Could not approve request.');
+      }
+    });
+  }
 
-        },
+  rejectPartnerRequest(request: any): void {
+    this.partnerService.rejectRequest(request.id).subscribe({
+      next: () => {
+        this.zone.run(() => {
+          this.showSuccess('Partner request rejected.');
+          this.loadPartnerRequests();
+          this.cdr.detectChanges();
+        });
+      },
 
-        error: (err: any) => {
-
-          console.log(
-            'FIELDS ERROR:',
-            err
-          );
-
-          this.zone.run(() => {
-
-            this.loading = false;
-
-            this.showError(
-              'Could not load fields.'
-            );
-
-            this.cdr.detectChanges();
-
-          });
-
-        }
-
-      });
-
+      error: (err: any) => {
+        console.log('REJECT ERROR:', err);
+        this.showError('Could not reject request.');
+      }
+    });
   }
 
   onImageSelected(event: any): void {
@@ -179,10 +205,7 @@ export class AdminDashboard implements OnInit {
       return;
     }
 
-    if (
-      !this.fieldForm.pricePerHour ||
-      this.fieldForm.pricePerHour <= 0
-    ) {
+    if (!this.fieldForm.pricePerHour || this.fieldForm.pricePerHour <= 0) {
       this.showError('Price must be greater than 0.');
       return;
     }
@@ -205,9 +228,7 @@ export class AdminDashboard implements OnInit {
         );
 
     request.subscribe({
-      next: (res: any) => {
-        console.log('SAVE FIELD RESPONSE:', res);
-
+      next: () => {
         this.zone.run(() => {
           this.saving = false;
 
@@ -225,8 +246,6 @@ export class AdminDashboard implements OnInit {
 
       error: (err: any) => {
         console.log('SAVE FIELD ERROR FULL:', err);
-        console.log('STATUS:', err.status);
-        console.log('ERROR BODY:', err.error);
 
         this.zone.run(() => {
           this.saving = false;
@@ -271,38 +290,30 @@ export class AdminDashboard implements OnInit {
       return;
     }
 
-    this.fieldService
-      .deleteField(this.fieldToDelete.id)
-      .subscribe({
-        next: (res: any) => {
-          console.log('DELETE RESPONSE:', res);
+    this.fieldService.deleteField(this.fieldToDelete.id).subscribe({
+      next: () => {
+        this.zone.run(() => {
+          this.showDeleteModal = false;
+          this.fieldToDelete = null;
 
-          this.zone.run(() => {
-            this.showDeleteModal = false;
-            this.fieldToDelete = null;
+          this.showSuccess('Field deleted successfully.');
+          this.loadFields(false);
+          this.cdr.detectChanges();
+        });
+      },
 
-            this.showSuccess('Field deleted successfully.');
+      error: (err: any) => {
+        console.log('DELETE ERROR FULL:', err);
 
-            this.loadFields(false);
-            this.cdr.detectChanges();
-          });
-        },
+        this.zone.run(() => {
+          this.showDeleteModal = false;
+          this.fieldToDelete = null;
 
-        error: (err: any) => {
-          console.log('DELETE ERROR FULL:', err);
-          console.log('STATUS:', err.status);
-          console.log('ERROR BODY:', err.error);
-
-          this.zone.run(() => {
-            this.showDeleteModal = false;
-            this.fieldToDelete = null;
-
-            this.showError('Could not delete field.');
-
-            this.cdr.detectChanges();
-          });
-        }
-      });
+          this.showError('Could not delete field.');
+          this.cdr.detectChanges();
+        });
+      }
+    });
   }
 
   closeDeleteModal(): void {

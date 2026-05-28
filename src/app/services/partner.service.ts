@@ -37,4 +37,34 @@ export class PartnerService {
       this.getHeaders()
     );
   }
+
+  getPendingRequests(): Observable<any> {
+    return this.http.get(
+      `${this.apiUrl}/pending`,
+      this.getHeaders()
+    );
+  }
+
+  approveRequest(id: number): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/approve/${id}`,
+      {},
+      {
+        ...this.getHeaders(),
+        responseType: 'text'
+      }
+    );
+  }
+
+  rejectRequest(id: number): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/reject/${id}`,
+      {},
+      {
+        ...this.getHeaders(),
+        responseType: 'text'
+      }
+    );
+  }
+
 }

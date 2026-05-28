@@ -2,54 +2,36 @@
 
 <section class="admin-page">
 
-  <div
-    class="toast success"
-    *ngIf="successMessage"
-  >
+  <div class="toast success" *ngIf="successMessage">
     ✅ {{ successMessage }}
   </div>
 
-  <div
-    class="toast error"
-    *ngIf="errorMessage"
-  >
+  <div class="toast error" *ngIf="errorMessage">
     ❌ {{ errorMessage }}
   </div>
 
-  <div
-    class="loading"
-    *ngIf="loading"
-  >
+  <div class="loading" *ngIf="loading">
     Loading admin dashboard...
   </div>
 
-  <div
-    class="admin-layout"
-    *ngIf="!loading && isAdmin"
-  >
+  <div class="admin-layout" *ngIf="!loading && isAdmin">
 
     <div class="admin-header">
+      <span>ADMIN PANEL</span>
 
-      <span>
-        ADMIN PANEL
-      </span>
-
-      <h1>
-        Manage Sports Fields
-      </h1>
+      <h1>Manage Sports Fields</h1>
 
       <p>
         Add, edit and remove venues from the SportConnect platform.
       </p>
-
     </div>
 
+    <!-- ZONA ADD / EDIT / DELETE TERENURI -->
     <div class="dashboard-grid">
 
       <div class="form-card">
 
         <div class="card-title">
-
           <h2>
             {{ editingFieldId ? 'Update Field' : 'Add New Field' }}
           </h2>
@@ -57,83 +39,45 @@
           <p>
             Complete the field details and upload an image.
           </p>
-
         </div>
 
-        <label>
-          Field Name
-        </label>
-
+        <label>Field Name</label>
         <input
           type="text"
           [(ngModel)]="fieldForm.name"
           placeholder="Ex: Teren Sintetic Oncea"
         >
 
-        <label>
-          Address
-        </label>
-
+        <label>Address</label>
         <input
           type="text"
           [(ngModel)]="fieldForm.address"
           placeholder="Ex: Strada Sportului nr. 1"
         >
 
-        <label>
-          Category
-        </label>
-
-        <select
-          [(ngModel)]="fieldForm.category"
-        >
-          <option value="">
-            Select category
-          </option>
-
-          <option value="Fotbal">
-            Fotbal
-          </option>
-
-          <option value="Tenis">
-            Tenis
-          </option>
-
-          <option value="Baschet">
-            Baschet
-          </option>
-
-          <option value="Volei">
-            Volei
-          </option>
-
-          <option value="Padel">
-            Padel
-          </option>
+        <label>Category</label>
+        <select [(ngModel)]="fieldForm.category">
+          <option value="">Select category</option>
+          <option value="Fotbal">Fotbal</option>
+          <option value="Tenis">Tenis</option>
+          <option value="Baschet">Baschet</option>
+          <option value="Volei">Volei</option>
+          <option value="Padel">Padel</option>
         </select>
 
-        <label>
-          Price / Hour
-        </label>
-
+        <label>Price / Hour</label>
         <input
           type="number"
           [(ngModel)]="fieldForm.pricePerHour"
         >
 
-        <label>
-          Phone Number
-        </label>
-
+        <label>Phone Number</label>
         <input
           type="text"
           [(ngModel)]="fieldForm.phoneNumber"
         >
 
-        <label>
-          Description
-        </label>
-
+        <label>Description</label>
         <textarea
           rows="4"
           [(ngModel)]="fieldForm.description"
@@ -142,10 +86,7 @@
         <div class="time-row">
 
           <div>
-            <label>
-              Open Time
-            </label>
-
+            <label>Open Time</label>
             <input
               type="time"
               [(ngModel)]="fieldForm.openTime"
@@ -153,10 +94,7 @@
           </div>
 
           <div>
-            <label>
-              Close Time
-            </label>
-
+            <label>Close Time</label>
             <input
               type="time"
               [(ngModel)]="fieldForm.closeTime"
@@ -185,10 +123,7 @@
 
         </div>
 
-        <label>
-          Field Image
-        </label>
-
+        <label>Field Image</label>
         <input
           type="file"
           accept="image/*"
@@ -222,21 +157,14 @@
       <div class="list-card">
 
         <div class="card-title">
-
-          <h2>
-            Existing Fields
-          </h2>
+          <h2>Existing Fields</h2>
 
           <p>
             {{ fields.length }} venues available.
           </p>
-
         </div>
 
-        <div
-          class="field-list"
-          *ngIf="fields.length > 0"
-        >
+        <div class="field-list" *ngIf="fields.length > 0">
 
           <div
             class="field-item"
@@ -249,10 +177,7 @@
             >
 
             <div class="field-info">
-
-              <h3>
-                {{ field.name }}
-              </h3>
+              <h3>{{ field.name }}</h3>
 
               <p>
                 {{ field.category }} · {{ field.pricePerHour }} RON/h
@@ -261,7 +186,6 @@
               <span>
                 {{ field.address }}
               </span>
-
             </div>
 
             <div class="item-actions">
@@ -288,11 +212,87 @@
 
         </div>
 
-        <div
-          class="empty"
-          *ngIf="fields.length === 0"
-        >
+        <div class="empty" *ngIf="fields.length === 0">
           No fields found.
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ZONA CERERI PARTENERI -->
+    <div class="partner-requests-card">
+
+      <div class="card-title">
+        <h2>Partner Requests</h2>
+
+        <p>
+          Review pending requests from people who want to become partners.
+        </p>
+      </div>
+
+      <div class="empty" *ngIf="partnerRequests.length === 0">
+        No pending partner requests.
+      </div>
+
+      <div
+        class="partner-request-list"
+        *ngIf="partnerRequests.length > 0"
+      >
+
+        <div
+          class="partner-request-item"
+          *ngFor="let request of partnerRequests"
+        >
+
+          <div class="request-main">
+
+            <div class="request-icon">
+              🤝
+            </div>
+
+            <div>
+              <h3>
+                {{ request.businessName || request.venueName || request.name || 'Partner request' }}
+              </h3>
+
+              <p>
+                {{ request.city || 'No city' }}
+                ·
+                {{ request.sportCategory || request.category || 'No category' }}
+              </p>
+
+              <span>
+                {{ request.phoneNumber || request.phone || 'No phone' }}
+              </span>
+            </div>
+
+          </div>
+
+          <div class="request-message">
+            {{ request.message || 'No message provided.' }}
+          </div>
+
+          <div class="request-actions">
+
+            <button
+              class="approve-btn"
+              type="button"
+              (click)="approvePartnerRequest(request)"
+            >
+              Approve
+            </button>
+
+            <button
+              class="reject-btn"
+              type="button"
+              (click)="rejectPartnerRequest(request)"
+            >
+              Reject
+            </button>
+
+          </div>
+
         </div>
 
       </div>
@@ -303,10 +303,8 @@
 
 </section>
 
-<div
-  class="delete-modal"
-  *ngIf="showDeleteModal"
->
+<!-- MODAL DELETE -->
+<div class="delete-modal" *ngIf="showDeleteModal">
 
   <div class="delete-box">
 
@@ -314,16 +312,11 @@
       ⚠️
     </div>
 
-    <h2>
-      Delete Field
-    </h2>
+    <h2>Delete Field</h2>
 
     <p>
       Are you sure you want to delete
-      <strong>
-        {{ fieldToDelete?.name }}
-      </strong>
-      ?
+      <strong>{{ fieldToDelete?.name }}</strong>?
     </p>
 
     <div class="delete-actions">
